@@ -7,7 +7,7 @@ const Navbar = () => {
         <Link href="/">Home</Link>
       </div>
       <div>
-        <Link href="/signin">Login test</Link>
+        <Link href="/signin">Login</Link>
       </div>
       <style jsx>{`
         nav {
