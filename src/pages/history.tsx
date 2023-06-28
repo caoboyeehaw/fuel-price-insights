@@ -17,6 +17,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen py-6 "> 
       <Navbar />
       <div className="mt-4 border-b-2 border-gray-200">
+        <h1 className="text-2xl font-bold mb-4">Fuel Quote History</h1>
         <div>
           <label htmlFor="start-date">Start Date:</label>
           <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} />
