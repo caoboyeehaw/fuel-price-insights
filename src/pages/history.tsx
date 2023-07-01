@@ -3,9 +3,9 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 
 export default function Home() {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [fuelQuotes, setFuelQuotes] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [fuelQuotes, setFuelQuotes] = useState<{date: string, gallons: number, clientLocation: string, fuelRate: number, finalPrice: number}[]>([]);
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
