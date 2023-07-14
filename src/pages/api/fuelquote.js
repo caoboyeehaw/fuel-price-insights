@@ -24,3 +24,7 @@ export default function handler(req, res){
         }
     }
 }
+
+//need to implement a pull action to grab data from the db.
+
+//fuel quote module needs to include a list of quote history for said clients. 
