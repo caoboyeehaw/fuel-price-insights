@@ -76,3 +76,5 @@ export default Fuel_quote;
 
 /*NOTE: the front end contains basic client side validations. More secure validations are
 used in the backend */
+
+//TODO: incorporate proper credential corrections. Right now it's all in console. 
