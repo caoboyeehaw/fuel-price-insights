@@ -14,6 +14,7 @@ const Navbar = () => {
           <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/pricing">Pricing</Link>
           <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/service">Service</Link>
           <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/fuel_quote_form">Fuel Form</Link>
+          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/history">Fuel Quote History</Link>
         </div>
         <div className="flex space-x-4 items-center">
 

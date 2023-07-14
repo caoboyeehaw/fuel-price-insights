@@ -5,9 +5,28 @@ import Navbar from '../components/Navbar';
 const Fuel_quote = () => {
     const {register, handleSubmit, formState: {errors} } = useForm();
 
-    const onSubmit = (data) => {
-        console.log(data);
-    }
+    const onSubmit = async (data) => {
+      // data includes all the form values
+      console.log(data);
+
+      const response = await fetch('api/fuelquote', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data), // this is the form data
+      });
+
+      if (response.ok) {
+          // Handle success
+          const responseData = await response.json();
+          console.log(responseData);
+      } else {
+          const errorData = await response.json();
+          // Handle error, maybe display the errorData to user
+          console.log(errorData);
+      }
+  }
 
     return (
         <div className="flex flex-col min-h-screen py-6">
@@ -24,7 +43,7 @@ const Fuel_quote = () => {
 
             <div>
                 <label>Delivery Address:</label>
-                <input type="text" {...register('deliveryAddress')} readOnly />
+                <input type="text" {...register('deliveryAddress')}/>
             </div>
 
             <div>
@@ -35,7 +54,7 @@ const Fuel_quote = () => {
 
             <div>
               <label>Suggested Price / Gallon:</label>
-              <input type="number" {...register('deliveryDate')} readOnly />
+              <input type="number" {...register('ppg')} readOnly />
             </div>
 
             <div>
@@ -54,15 +73,8 @@ const Fuel_quote = () => {
 };
 
 export default Fuel_quote;
-/*export default function Fuel_quote() {
-  return (
-    <div className="flex flex-col min-h-screen py-6 "> 
-      <Navbar />
-        <div className="mt-4 border-b-2 border-gray-200">
-        </div>
-        <div className="container mx-auto py-6">
-          JChicken nuggets!
-        </div>
-    </div>
-  );
-};*/
+
+/*NOTE: the front end contains basic client side validations. More secure validations are
+used in the backend */
+
+//TODO: incorporate proper credential corrections. Right now it's all in console. 
