@@ -1,11 +1,20 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
 
+type FormData = {
+  GallonNeeded: number;
+  deliveryAddress: string;
+  deliveryDate: string;
+  ppg: number;
+  totalAmountDue: number;
+}
 
 const Fuel_quote = () => {
-    const {register, handleSubmit, formState: {errors} } = useForm();
+    const {register, handleSubmit, formState: {errors} } = useForm<FormData>();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: FormData) => {    //dealing with backend -> db connection
       // data includes all the form values
       console.log(data);
 
@@ -26,7 +35,7 @@ const Fuel_quote = () => {
           // Handle error, maybe display the errorData to user
           console.log(errorData);
       }
-  }
+    }
 
     return (
         <div className="flex flex-col min-h-screen py-6">
@@ -34,22 +43,22 @@ const Fuel_quote = () => {
       <div className="flex items-center justify-center min-h-screen bg-opacity-50 bg-gray-900">
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col">
           <form onSubmit={handleSubmit(onSubmit)}>
-
             <div>
               <label>Gallons Requested:</label>
               <input {...register('GallonNeeded', { required: true })} />
-              {errors.GallonNeeded && <p>This field is required</p>}
+              {errors.GallonNeeded && <p className="text-red-500">This field is required</p>}
             </div>
 
             <div>
                 <label>Delivery Address:</label>
-                <input type="text" {...register('deliveryAddress')}/>
+                <input type="text" {...register('deliveryAddress', {required: true})}/>
+                {errors.deliveryAddress && <p className="text-red-500">This field is required</p>}
             </div>
 
             <div>
                 <label>Delivery Date:</label>
                 <input type="date" {...register('deliveryDate', {required: true})} />
-                {errors.deliveryDate && <p>This field is required</p>}
+                {errors.deliveryDate && <p className="text-red-500">This field is required</p>}
             </div>
 
             <div>
@@ -73,8 +82,4 @@ const Fuel_quote = () => {
 };
 
 export default Fuel_quote;
-
-/*NOTE: the front end contains basic client side validations. More secure validations are
-used in the backend */
-
 //TODO: incorporate proper credential corrections. Right now it's all in console. 
