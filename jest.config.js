@@ -1,14 +1,15 @@
 module.exports = {
+    collectCoverage: true,
+    coverageReporters: ["json", "lcov", "text", "clover"],
+    testMatch: ["<rootDir>/src/**/*.spec.(js|jsx|ts|tsx)"],
+    testPathIgnorePatterns: ["/node_modules/"],
     transform: {
-        '^.+\\.jsx?$': 'babel-jest',
-        '^.+\\.tsx?$': 'babel-jest',
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
     },
-
-    /*testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-    setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
-    moduleNameMapper: {
-      '\\.(css|less|sass|scss)$': 'identity-obj-proxy'
+    globals: {
+      "ts-jest": {
+        tsconfig: "<rootDir>/tsconfig.json",
+      },
     },
-    coverageReporters: ['lcov'],*/
-  }
-  
+    moduleFileExtensions: ["js", "jsx", "ts", "tsx"],
+  };

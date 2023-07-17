@@ -82,4 +82,5 @@ const Fuel_quote = () => {
 };
 
 export default Fuel_quote;
+
 //TODO: incorporate proper credential corrections. Right now it's all in console. 
