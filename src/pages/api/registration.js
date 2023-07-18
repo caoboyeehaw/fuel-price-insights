@@ -1,25 +1,45 @@
-export default function handler(req, res) {
-    if(req.method === 'POST'){
-        const {fullName, address1, address2, city, state, zipcode} = req.body;
+import { getDatabase } from './db';
 
-        if(fullName <= 0){
-            return res.status(400).json({error: 'Please enter valid name'});
-        }
-        if(address1 <= 0){
-            return res.status(400).json({error: 'Please enter valid address'});
-        }
-        if(city <= 0){
-            return res.status(400).json({error: 'Please enter valid city'});
-        }
-        if(state <= 0){
-            return res.status(400).json({error: 'Please enter valid state'});
-        }
-        if(zipcode <= 0 || zipocde > 9){
-            return res.status(400).json({error: 'Please enter 5 digit zipcode'});
-        }
-        return res.status(200).json({ message: 'Registration successful' });
+export default async function clientProfileHandler(req, res) {
+  if (req.method === 'POST') {
+    const { fullName, address1, address2, city, state, zipcode } = req.body;
 
+    if (!fullName || fullName.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid name' });
     }
-    return res.status(405).json({ error: 'Method not allowed' });
+    if (!address1 || address1.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid address' });
+    }
+    if (!city || city.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid city' });
+    }
+    if (!state || state.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid state' });
+    }
+    if (!zipcode || zipcode.trim().length !== 5) {
+      return res.status(400).json({ error: 'Please enter a valid 5-digit zipcode' });
+    }
 
+    try {
+      const db = await getDatabase();
+      const collection = db.collection('ClientProfile');
+
+      // Insert the client profile data into the 'ClientProfile' collection
+      await collection.insertOne({
+        fullName,
+        address1,
+        address2,
+        city,
+        state,
+        zipcode,
+      });
+
+      return res.status(200).json({ message: 'Registration successful' });
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
 }

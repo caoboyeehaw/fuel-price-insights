@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
+import { getDatabase } from './api/db'
 
 const RegistrationPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -25,14 +26,6 @@ const RegistrationPage = () => {
       console.log(errorData);
     }
   }
-
-  // const openModal = () => {
-  //   setShowModal(true);
-  // }
-
-  // const closeModal = () => {
-  //   setShowModal(false);
-  // }
 
   return (
     <div className="flex flex-col min-h-screen py-6">
