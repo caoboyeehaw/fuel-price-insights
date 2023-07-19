@@ -10,14 +10,19 @@ export async function connectToDatabase() {
     return cachedClient;
   }
 
-  const client = await MongoClient.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  try {
+    const client = await MongoClient.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-  cachedClient = client;
+    cachedClient = client;
 
-  return client;
+    return client;
+  } catch (error) {
+    console.error('Failed to connect to database:', error);
+    throw error;
+  }
 }
 
 export async function getDatabase() {
