@@ -28,11 +28,11 @@ const Fuel_quote = () => {
       }
   }
 
-    return (
-        <div className="flex flex-col min-h-screen py-6">
-      <Navbar />
-      <div className="flex items-center justify-center min-h-screen bg-opacity-50 bg-gray-900">
-        <div className="bg-white p-8 rounded-lg shadow-md flex flex-col">
+  return (
+    <div className="flex flex-col">
+        <Navbar />
+        <div className="flex items-center justify-center h-screen bg-opacity-50 bg-gray-900">
+            <div className="bg-white p-8 rounded-lg shadow-md flex flex-col">
           <form onSubmit={handleSubmit(onSubmit)}>
 
             <div>

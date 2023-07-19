@@ -9,6 +9,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Merriweather Sans', 'sans-serif'],
+
+      },
+      fontSize: {
+        '1.5xl': '1.375rem',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

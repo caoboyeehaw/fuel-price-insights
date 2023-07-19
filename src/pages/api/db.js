@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-const uri = 'mongodb+srv://fueling:FHdWRObrHCqqZRhD@fuelprice.9ffrxzl.mongodb.net/'; // Replace with your MongoDB connection string
-const dbName = 'FUEL_PRICE_PROJECT'; // Replace with your database name
+const uri = 'mongodb+srv://fueling:FHdWRObrHCqqZRhD@fuelprice.9ffrxzl.mongodb.net/'; 
+const dbName = 'FUEL_PRICE_PROJECT'; 
 
 let cachedClient = null;
 
@@ -24,3 +24,4 @@ export async function getDatabase() {
   const client = await connectToDatabase();
   return client.db(dbName);
 }
+

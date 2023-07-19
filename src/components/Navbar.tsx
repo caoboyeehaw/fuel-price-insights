@@ -1,20 +1,23 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Navbar = () => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-3">
       <nav className="flex justify-between items-center">
-        <div>
-          <Link href="/" className="font-bold text-2xl text-green-700">FuelPriceInsights</Link>
-          
-        </div>
+      <div>
+        <Link href="/">
+          <div className="font textxl text-green-700 flex items-center">
+            <Image src="/FPI_Logo.png" alt="Logo" width={60} height={60} />
+            <span className="ml-3">A Fuel Analysis Tool</span>
+          </div>
+        </Link>
+      </div>
 
         <div>
-          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/showcase">Showcase</Link>
-          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/pricing">Pricing</Link>
-          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/service">Service</Link>
-          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/fuel_quote_form">Fuel Form</Link>
-          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/history">Fuel Quote History</Link>
+          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/calculator">Calculator</Link>
+          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/fuelform">Fuel Form</Link>
+          <Link className="text-md rounded-lg px-4 py-2 text-slate-500 hover:text-black" href="/quotehistory">Quote History</Link>
         </div>
         <div className="flex space-x-4 items-center">
 

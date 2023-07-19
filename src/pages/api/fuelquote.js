@@ -1,5 +1,3 @@
-
-
 export default function handler(req, res){
     if(req.method === 'POST'){
         const {GallonNeeded, deliveryAddress, deliveryDate, ppg, totalAmountDue} = req.body;
