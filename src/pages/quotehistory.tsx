@@ -1,6 +1,7 @@
-//Nibras Sultan
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
+
+
 
 export default function Home() {
   const [startDate, setStartDate] = useState("");
@@ -34,19 +35,19 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-20">
         <Navbar />
-        <div className="flex flex-col items-center justify-start pt-12 min-h-screen">
-            <div className="mt-4 border-gray-200">
+        <div className="flex flex-col items-center justify-start pt-4 min-h-screen ">
+            <div className="mt-4 border-gray-200 border rounded-md bg-white p-6 shadow-lg">
         <h1 className="text-2xl font-bold mb-4 text-center">Fuel Quote History</h1>
-        <div className="flex justify-center space-x-4">
+        <div className="space-y-4">
           <div>
-            <label htmlFor="start-date">Start Date:</label>
-            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} className="border-gray-300 rounded-md p-2" />
+            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">Start Date:</label>
+            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
           <div>
-            <label htmlFor="end-date">End Date:</label>
-            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} className="border-gray-300 rounded-md p-2" />
+            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">End Date:</label>
+            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
         </div>
         <div className="mt-4 flex justify-center">
@@ -85,3 +86,4 @@ export default function Home() {
     </div>
   );
 };
+
