@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;700&display=swap');
 
 :root {
-  --foreground-rgb: 17, 17, 17; /* Black color similar to Amazon */
+  --foreground-rgb: 255, 255, 255; /* white color */
   --background-start-rgb: 255, 255, 255; /* Pure white */
   --background-end-rgb: 255, 255, 255; /* Pure white */
 }
@@ -13,8 +13,8 @@
 @media (prefers-color-scheme: light) {
   :root {
     --foreground-rgb: 255, 255, 255; /* Pure white for dark mode text */
-    --background-start-rgb: 0, 0, 0; /* Pure black for dark mode background */
-    --background-end-rgb: 0, 0, 0; /* Pure black for dark mode background */
+    --background-start-rgb: 255, 255, 255; /* Pure light for dark mode background */
+    --background-end-rgb: 255, 255, 255; /* Pure light  for dark mode background */
   }
 }
 
