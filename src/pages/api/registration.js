@@ -2,10 +2,16 @@ import { getDatabase } from './db';
 
 export default async function clientProfileHandler(req, res) {
   if (req.method === 'POST') {
-    const { fullName, address1, address2, city, state, zipcode } = req.body;
+    const { fullName, address1, address2, city, state, zipcode, email, password } = req.body;
 
     if (!fullName || fullName.trim().length === 0) {
       return res.status(400).json({ error: 'Please enter a valid name' });
+    }
+    if (!email || email.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid email' });
+    }
+    if (!password || password.trim().length === 0) {
+      return res.status(400).json({ error: 'Please enter a valid password' });
     }
     if (!address1 || address1.trim().length === 0) {
       return res.status(400).json({ error: 'Please enter a valid address' });
@@ -23,8 +29,8 @@ export default async function clientProfileHandler(req, res) {
     try {
       const db = await getDatabase();
       const collection = db.collection('ClientProfile');
+      const collection2 = db.collection('UserCredentials');
 
-      // Insert the client profile data into the 'ClientProfile' collection
       await collection.insertOne({
         fullName,
         address1,
@@ -32,6 +38,11 @@ export default async function clientProfileHandler(req, res) {
         city,
         state,
         zipcode,
+      });
+
+      await collection2.insertOne({
+        email,
+        password,
       });
 
       return res.status(200).json({ message: 'Registration successful' });

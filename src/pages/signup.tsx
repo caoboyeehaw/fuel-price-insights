@@ -28,7 +28,7 @@ const RegistrationPage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen py-6">
       <Navbar />
       <div className="flex items-center justify-center min-h-screen bg-opacity-50 bg-gray-900">
         <div className="bg-white p-8 rounded-lg shadow-md flex flex-col">
@@ -44,6 +44,28 @@ const RegistrationPage = () => {
                 className="border border-gray-300 rounded-md px-3 py-2 text-black"
               />
               {errors.fullName && <p>This field is required</p>}
+            </div>
+            <div className="mb-4">
+              <label htmlFor="email" className="text-black mb-1 flex justify-start">Email:</label>
+              <input
+              //i think its not submutting because of the the type, check later, check with login.tsx because it works
+                type="text"
+                id="email"
+                {...register('email', { required: true, maxLength: 50 })}
+                className="border border-gray-300 rounded-md px-3 py-2 text-black"
+              />
+              {errors.email && <p>This field is required</p>}
+            </div>
+            <div className="mb-4">
+              <label className="text-black mb-1">Password:</label>
+              <div className="flex">
+                <input
+                  type="password"
+                  {...register('password', { required: true })}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-black"
+                />
+              </div>
+              {errors.password && <p>This field is required</p>}
             </div>
             <div className="mb-4">
           <label htmlFor="address1" className="text-black mb-1 flex justify-start">Address 1:</label>
