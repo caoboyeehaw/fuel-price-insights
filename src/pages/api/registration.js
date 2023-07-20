@@ -1,4 +1,5 @@
 import { getDatabase } from './db';
+import bcrypt from 'bcrypt';
 
 export default async function clientProfileHandler(req, res) {
   if (req.method === 'POST') {
@@ -28,9 +29,19 @@ export default async function clientProfileHandler(req, res) {
 
     try {
       const db = await getDatabase();
-      const collection = db.collection('ClientProfile');
-      const collection2 = db.collection('UserCredentials');
+      const collection = db.collection('ClientInfo');
+      //const collection2 = db.collection('UserCredentials');
 
+      //checking if email is in use
+      const existingUser = await collection.findOne({ email });
+
+      if(existingUser){
+        return res.status(400).json({ error: 'Email is already in use!' });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      //combining login info (email, pass) into one document stack.
       await collection.insertOne({
         fullName,
         address1,
@@ -38,12 +49,14 @@ export default async function clientProfileHandler(req, res) {
         city,
         state,
         zipcode,
+        email,
+        password: hashedPassword,
       });
 
-      await collection2.insertOne({
+      /*await collection2.insertOne({
         email,
         password,
-      });
+      });*/
 
       return res.status(200).json({ message: 'Registration successful' });
     } catch (error) {
