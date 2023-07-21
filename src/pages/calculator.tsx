@@ -67,7 +67,7 @@ export default function Calculator() {
               </label>
               
               <input 
-                className="border border-gray-400 p-2 w-full rounded"
+                className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 name="gallonsRequested"
                 value={form.gallonsRequested}
                 onChange={handleInputChange}
