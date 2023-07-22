@@ -38,20 +38,20 @@ export default function Home() {
     <div className="flex flex-col py-20">
         <Navbar />
         <div className="flex flex-col items-center justify-start pt-4 min-h-screen ">
-            <div className="mt-4 border-gray-200 border rounded-md bg-white p-6 shadow-lg">
+            <div className="mt-4 border-gray-200 border rounded bg-white p-6 shadow-lg">
         <h1 className="text-2xl font-bold mb-4 text-center">Fuel Quote History</h1>
         <div className="space-y-4">
           <div>
             <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">Start Date:</label>
-            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+            <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
           <div>
             <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">End Date:</label>
-            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+            <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
         </div>
         <div className="mt-4 flex justify-center">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded mb-3" onClick={generateSampleFuelQuotes}>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded mb-6 mt-2" onClick={generateSampleFuelQuotes}>
             Retrieve Quote History
           </button>
         </div>

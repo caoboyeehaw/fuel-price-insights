@@ -1,3 +1,4 @@
+/*
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
@@ -128,3 +129,5 @@ const RegistrationPage = () => {
 };
 
 export default RegistrationPage;
+
+*/
