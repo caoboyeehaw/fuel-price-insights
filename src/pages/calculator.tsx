@@ -29,19 +29,15 @@ export default function Calculator() {
     let margin = currentPrice;
 
     const locationFactor = form.deliveryState === 'Texas' ? 0.02 : 0.04;
-
     const rateHistoryFactor = form.rateHistory ? 0.01 : 0;
     
     const gallonsRequested = parseInt(form.gallonsRequested); 
     const gallonsRequestedFactor = gallonsRequested > 1000 ? 0.02 : 0.03;
 
     const companyProfitFactor = 0.1;
-
     margin *= (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor);
 
     const suggestedPrice = currentPrice + margin;
-
-    
     const totalAmountDue = suggestedPrice * gallonsRequested;
 
     // Update quote state
@@ -75,14 +71,14 @@ export default function Calculator() {
             </div>
             <div className="flex justify-between">
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 onClick={handleGetQuote}  
               >
                 Get Quote
               </button>
 
               <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Submit Quote
               </button>
@@ -94,3 +90,4 @@ export default function Calculator() {
   );
 
 }
+

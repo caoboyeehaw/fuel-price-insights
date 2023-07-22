@@ -26,7 +26,7 @@ const Fuel_quote = () => {
                   className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500" 
                 {...register('GallonNeeded', { required: true })} 
               />
-              {errors.GallonNeeded && <p className="text-red-500">This field is required</p>}
+              {errors.GallonNeeded && <p className="text-red-500 text-sm">This field is required</p>}
             </div>
 
             <div className="mb-4">
@@ -36,8 +36,9 @@ const Fuel_quote = () => {
               <input 
                 className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 type="text" 
-                {...register('deliveryAddress')}
+                {...register('deliveryAddress', {required: true})}
               />
+              {errors.deliveryAddress && <p className="text-red-500 text-sm">This field is required</p>}
             </div>
 
             <div className="mb-4">
@@ -49,7 +50,7 @@ const Fuel_quote = () => {
                 type="date"
                 {...register('deliveryDate', {required: true})} 
               />
-              {errors.deliveryDate && <p className="text-red-500">This field is required</p>}
+              {errors.deliveryDate && <p className="text-red-500 text-sm">This field is required</p>}
             </div>
 
             <div className="mb-4">
@@ -76,7 +77,7 @@ const Fuel_quote = () => {
               />
             </div>
             <button
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full max-w-lg"
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full max-w-lg"
           type="submit"
           >
           Submit
@@ -84,16 +85,13 @@ const Fuel_quote = () => {
 
           </form>
 
-
         </div>
 
-
       </div>
-
     </div>
+
 
   );
 }
 
 export default Fuel_quote;
-

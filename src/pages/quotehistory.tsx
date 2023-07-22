@@ -51,7 +51,7 @@ export default function Home() {
           </div>
         </div>
         <div className="mt-4 flex justify-center">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-8 rounded mb-3" onClick={generateSampleFuelQuotes}>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-8 rounded mb-3" onClick={generateSampleFuelQuotes}>
             Retrieve Quote History
           </button>
         </div>
