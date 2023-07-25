@@ -77,11 +77,11 @@ const Navbar = () => {
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
             <div className="flex space-x-4 items-center">
-            <div onClick={() => setShowModal(true)} className="text-md flex items-center rounded-md px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white">
-              <span className="mx-auto">Log In</span>
+            <div onClick={() => setShowModal(true)} className="ring-2 ring-blue-600 bg-white hover:blue-600 hover:text-white text-blue-600 text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
+              <span className="mx-auto cursor-pointer">Log In</span>
             </div>
-              <div onClick={() => setShowModalSignup(true)} className="text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
-                <span className="mx-auto">Sign Up</span>
+              <div onClick={() => setShowModalSignup(true)} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
+                <span className="mx-auto cursor-pointer">Sign Up</span>
               </div>
             </div>
           </nav>
@@ -89,10 +89,10 @@ const Navbar = () => {
       </div>
       
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
           <div className=" inset-0 flex items-center justify-center">
             
-            <div className="bg-white p-6 rounded-lg shadow-md flex flex-col relative">
+          <div className="p-6 rounded-lg shadow-md flex flex-col relative bg-white">
 
             <div className="flex items-center ">
               <Image src="/FPI_Logo.png" alt="Logo" width="50" height="50" className="mr-2 mb-4" />
@@ -139,7 +139,7 @@ const Navbar = () => {
 
                 <div className="flex justify-end space-x-4 mt-5">
                   <button className="text-md rounded px-1 py-1 ring-1 ring-gray-400 bg-white hover:bg-gray-400 hover:text-white text-gray-400 w-full" onClick={() => setShowModal(false)}>Cancel</button>  
-                  <button className="text-md rounded px-1 py-1 ring-1 ring-blue-600 bg-blue-600 hover:bg-blue-700 text-white w-full" type="submit">Log In</button>
+                  <button className="text-md rounded px-1 py-1 ring-1 ring-blue-600 bg-blue-600 hover:bg-blue-700 text-white w-full" type="submit" >Log In</button>
                 </div>
 
               </form>
@@ -161,7 +161,7 @@ const Navbar = () => {
       )}
 
 {showModalSignup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20">
+        <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
     <div className="bg-white p-6 rounded-lg shadow-md flex flex-col relative">
       <button
         className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
