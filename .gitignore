@@ -37,4 +37,4 @@ next-env.d.ts
 .next/cache/webpack/client-development/index.pack
 
 # package lock json 
-# package-lock.json
+package-lock.json
