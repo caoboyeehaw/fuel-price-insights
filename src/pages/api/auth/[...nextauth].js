@@ -1,27 +1,50 @@
-/*import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
-import {MongoClient } from "mongodb"
-
-const client = new MongoClient(process.env.MONGODB_URI)
+import NextAuth from "next-auth";
+import Providers from "next-auth/providers";
+import { getDatabase } from "./db";
 
 export default NextAuth({
-    providers: [
-        Provers.Credentials({
-            name: 'Credentials',
-            credentials: {
-                email: { label: "Email", type: "text" },
-                password: { label: "Password", type: "password" },
-            },
-            async authorize(credentials){
-                const user = { id: 1, name: }
-            }
-        })
-    ]
-})
+  providers: [
+    Providers.Credentials({
+      name: 'Credentials',
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: {  label: "Password", type: "password" }
+      },
+      authorize: async (credentials) => {
+        const db = await getDatabase();
+        const clientProfile = db.collection('ClientInfo');
 
-//callbacks go here 
-//defines who is a customer vs admin with the use of tokens too.
+        const user = await clientProfile.findOne({ username: credentials.username });
 
-*/
-//THIS IS INCOMPLETE
+        if (user) {
+          const isPasswordMatch = await bcrypt.compare(credentials.password, user.password);
+          if (isPasswordMatch) {
+            return Promise.resolve(user);
+          } else {
+            return Promise.resolve(null);
+          }
+        } else {
+          return Promise.resolve(null);
+        }
+      }
+    })
+  ],
+  session: {
+    jwt: true,
+  },
+  callbacks: {
+    async jwt(token, user) {
+      if (user) {
+        token.id = user._id;
+      }
+      return token;
+    },
+    async session(session, token) {
+      session.userId = token.id;
+      return session;
+    },
+  },
+  database: process.env.MONGODB_URI,
+});
+
+
