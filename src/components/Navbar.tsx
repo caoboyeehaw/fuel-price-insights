@@ -77,19 +77,19 @@ const onSubmitSignup = async (data) => {
           <nav className="flex justify-between items-center w-full">
             <div>
               <Link href="/">
-                <div className="text-xl text-green-700 flex items-center">
+                <div className="text-sm text-green-700 flex items-center">
                   <Image src="/FPI_Logo.png" alt="Logo" width={50} height={50} />
                   <div className="ml-5 flex flex-nowrap">
-                    <p className="mr-1">A Fuel</p>
-                    <p className="font-bold mr-1">Provider</p>
+                    <p className="lg:text-xl mr-1">A Fuel</p>
+                    <p className="lg:text-xl font-bold mr-1">Provider</p>
                   </div>
                 </div>
               </Link>
             </div>
             <div className="flex space-x-4">
-              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Homepage</Link>
-              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
-              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
+              <Link className={`xl:text-md text-sm rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Homepage</Link>
+              <Link className={`sm:text-md text-sm rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
+              <Link className={`xl:text-md text-sm rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
               <div className="flex space-x-4 items-center">
               {session ? (
