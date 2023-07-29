@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
-const Navbar = () => {
+const NavbarAuth = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalSignup, setShowModalSignup] = useState(false);
 
@@ -72,16 +72,16 @@ const Navbar = () => {
               </Link>
             </div>
             <div>
-              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Home</Link>
+                <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Home</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
             <div className="flex space-x-4 items-center">
-            <div onClick={() => setShowModal(true)} className="ring-2 ring-blue-600 bg-white hover:blue-600 hover:text-white text-blue-600 text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
-              <span className="mx-auto cursor-pointer">Log In</span>
+            <div onClick={() => setShowModal(true)} className=" bg-white hover:blue-600 hover:text-white text-blue-600 text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
+              <span className="mx-auto cursor-pointer">Profile</span>
             </div>
               <div onClick={() => setShowModalSignup(true)} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
-                <span className="mx-auto cursor-pointer">Sign Up</span>
+                <span className="mx-auto cursor-pointer">Sign Out</span>
               </div>
             </div>
           </nav>
@@ -284,4 +284,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarAuth;

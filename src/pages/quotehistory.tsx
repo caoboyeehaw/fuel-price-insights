@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-
-
+import NavbarAuth from '../components/NavbarAuth';
 
 export default function Home() {
   const [startDate, setStartDate] = useState("");
