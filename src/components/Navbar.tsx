@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -12,47 +14,61 @@ const Navbar = () => {
 
   const router = useRouter();
 
+  const { data: session } = useSession();
+
   const onSubmit = async (data) => {
     console.log(data);
-  
-    const response = await fetch('api/loginback', {
+
+    const result = await signIn('credentials', { 
+        redirect: false, 
+        email: data.email, 
+        password: data.password 
+    });
+
+if (result && result.error) {
+  console.log('Error:', result.error);
+} else if (result && !result.error) {
+  console.log('Sign in successful');
+  setShowModal(false);  // This line closes the modal after a successful login
+}
+}
+
+const onSubmitSignup = async (data) => {
+  console.log(data);
+
+  const response = await fetch('api/registration', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
-    });
-  
-    if (response.ok) {
+  });
+
+  if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData)
-    } else {
+      console.log(responseData);
+
+      // Authenticate the user after successful registration
+      const result = await signIn('credentials', { 
+          redirect: false, 
+          email: data.email, 
+          password: data.password 
+      });
+
+      if (!result?.error) {
+          console.log('Sign in successful');
+          // Here you can do a redirection or show a success message
+          setTimeout(() => setShowModalSignup(false), 2000);
+      } else {
+          console.log(result?.error);
+          // Here you can show an error message
+      }
+  } else {
       const errorData = await response.json();
       console.log(errorData);
-    }
   }
+}
 
-  const onSubmitSignup = async (data) => {
-    console.log(data);
-
-    const response = await fetch('api/registration',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-  
-    if (response.ok) {
-      const responseData = await response.json();
-      console.log(responseData)
-      // Close the modal after 2000 miliseconds
-      setTimeout(() => setShowModalSignup(false), 2000);
-    } else {
-      const errorData = await response.json();
-      console.log(errorData);
-    }
-  }
 
   return (
     <div className="fixed top-0 left-0 right-0 z-1">
@@ -70,19 +86,26 @@ const Navbar = () => {
                 </div>
               </Link>
             </div>
-            <div>
+            <div className="flex space-x-4">
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Homepage</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
-            <div className="flex space-x-4 items-center">
-            <div onClick={() => setShowModal(true)} className="ring-2 ring-blue-600 bg-white hover:blue-600 hover:text-white text-blue-600 text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
-              <span className="mx-auto cursor-pointer">Log In</span>
-            </div>
-              <div onClick={() => setShowModalSignup(true)} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
-                <span className="mx-auto cursor-pointer">Sign Up</span>
+              <div className="flex space-x-4 items-center">
+              {session ? (
+                <p>Authenticated</p>
+              ) : (
+                <>
+                  <div onClick={() => setShowModal(true)} className="ring-2 ring-blue-600 bg-white hover:blue-600 hover:text-white text-blue-600 text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
+                    <span className="mx-auto cursor-pointer">Log In</span>
+                  </div>
+                  <div onClick={() => setShowModalSignup(true)} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
+                    <span className="mx-auto cursor-pointer">Sign Up</span>
+                  </div>
+                </>
+              )}
               </div>
-            </div>
+
           </nav>
         </div>
       </div>
