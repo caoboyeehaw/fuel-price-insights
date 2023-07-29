@@ -3,29 +3,29 @@ import bcrypt from 'bcrypt';
 
 export default async function handler(req, res) {
     if(req.method === 'POST'){
-        const {email, password} = req.body;
+        const { username, password } = req.body; // Change email to username
 
-        if(!email || email.trim().length === 0){
-            return res.status(400).json({error: 'Email must be entered'});
+        if(!username || username.trim().length === 0){ // Check if username is empty
+            return res.status(400).json({error: 'Username must be entered'});
         }
         if(!password || password.trim().length === 0){
             return res.status(400).json({error: 'Please enter valid password'});
         }
-        //establishing conenction to mongoDB
+        //establishing connection to mongoDB
 
         const db = await getDatabase();
         const clientProfile = db.collection('ClientInfo');
 
-        //searching for matching email
-        const user = await clientProfile.findOne({ email });
+        //searching for matching username
+        const user = await clientProfile.findOne({ username }); // Change email to username
         if(!user){
-            return res.status(401).json({ error: 'Invalid email or password! '});
+            return res.status(401).json({ error: 'Invalid username or password! '});
         }
 
         //unhashing password
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if(!isPasswordMatch){
-            return res.status(401).json({ error: 'Invalid email or password! '});
+            return res.status(401).json({ error: 'Invalid username or password! '});
         }
 
         //returns the client's _id from mongodb as a string!
@@ -33,5 +33,4 @@ export default async function handler(req, res) {
 
     }
     return res.status(405).json({ error: 'Method not allowed' });
-
 }

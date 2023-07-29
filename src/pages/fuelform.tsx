@@ -11,6 +11,7 @@ const Fuel_quote = () => {
   const onSubmit = async (data) => {
     // submit form data
   };
+  
   const [form, setForm] = useState({
     gallonsRequested: '',
     deliveryState: '', 

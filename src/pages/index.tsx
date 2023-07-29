@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100 justify-center items-center">
+    <div className="flex flex-col min-h-screen bg-white justify-center items-center">
       <NavbarAuth />
       <div className="w-full">
         <div className="bg-cover bg-center h-screen" 

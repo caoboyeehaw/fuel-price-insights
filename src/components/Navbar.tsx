@@ -14,15 +14,15 @@ const Navbar = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-
-    const response = await fetch('api/loginback',{
+  
+    const response = await fetch('api/loginback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
-
+  
     if (response.ok) {
       const responseData = await response.json();
       console.log(responseData)
@@ -65,14 +65,13 @@ const Navbar = () => {
                   <Image src="/FPI_Logo.png" alt="Logo" width={50} height={50} />
                   <div className="ml-5 flex flex-nowrap">
                     <p className="mr-1">A Fuel</p>
-                    <p className="font-bold mr-1">Analysis</p>
-                    <p>Tool</p>
+                    <p className="font-bold mr-1">Provider</p>
                   </div>
                 </div>
               </Link>
             </div>
             <div>
-              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Home</Link>
+              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Homepage</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
@@ -119,8 +118,9 @@ const Navbar = () => {
                   <label className="text-black mb-1">Email Address:</label>
                   <div className="flex">
                     <input
-                      {...register('email', { required: true })}
-                      className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    type="email"
+                      {...register('email', { required: true, maxLength: 50 })}
+                    className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   {errors.email && <p className="text-red-600 text-sm">This field is required</p>}
@@ -184,20 +184,9 @@ const Navbar = () => {
                 
         </div>
               
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmitSignup)}>
             <div className="mb-4">
-              <label htmlFor="fullName" className="text-black mb-1 flex justify-start">Full Name:</label>
-              <input
-              //i think its not submutting because of the the type, check later, check with login.tsx because it works
-                type="text"
-                id="fullName"
-                {...register('fullName', { required: true, maxLength: 50 })}
-                className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-              {errors.fullName && <p className="text-red-600 text-sm">This field is required</p>}
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="text-black mb-1 flex justify-start">Email:</label>
+              <label htmlFor="email" className="text-black mb-1 flex justify-start">Email Address:</label>
               <input
               //i think its not submutting because of the the type, check later, check with login.tsx because it works
                 type="text"
@@ -207,6 +196,7 @@ const Navbar = () => {
               />
               {errors.email && <p className="text-red-600 text-sm">This field is required</p>}
             </div>
+
             <div className="mb-4">
               <label className="text-black mb-1">Password:</label>
               <div className="flex">
@@ -218,58 +208,9 @@ const Navbar = () => {
               </div>
               {errors.password && <p className="text-red-600 text-sm">This field is required</p>}
             </div>
-            <div className="mb-4">
-          <label htmlFor="address1" className="text-black mb-1 flex justify-start">Address 1:</label>
-          <input
-            type="text"
-            id="address1"
-            {...register('address1', { required: true, maxLength: 100 })}
-            className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-          {errors.address1 && <p className="text-red-600 text-sm">This field is required</p>}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="address2" className="text-black mb-1 flex justify-start">Address 2:</label>
-          <input
-            type="text"
-            id="address2"
-            {...register('address2', { maxLength: 100 })}
-            className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="city" className="text-black mb-1 flex justify-start">City:</label>
-          <input
-            type="text"
-            id="city"
-            {...register('city', { required: true, maxLength: 100 })}
-            className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-          {errors.city && <p className="text-red-600 text-sm">This field is required</p>}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="state" className="text-black mb-1 flex justify-start">State:</label>
-          <select
-            id="state"
-            {...register('state', { required: true })}
-            className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="">Select State</option>
-            <option value="AL">AL</option>
-            <option value="AK">AK</option>
-          </select>
-          {errors.state && <p className="text-red-600 text-sm">This field is required</p>}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="zipcode" className="text-black mb-1 flex justify-start">Zipcode:</label>
-          <input
-            type="text"
-            id="zipcode"
-            {...register('zipcode', { required: true, minLength: 5, maxLength: 9 })}
-            className="border border-gray-400 rounded px-3 py-2 text-black focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-          {errors.zipcode && <p className="text-red-600 text-sm">At least 5 characters required</p>}
-        </div>
+
+        
+
             <div className="flex justify-end space-x-4 mt-5">
               <button className="text-md rounded px-1 py-1 ring-1 ring-gray-400 bg-white hover:bg-gray-400 hover:text-white text-gray-400 w-full" onClick={() => setShowModalSignup(false)}>Cancel</button>  
               <button className="text-md rounded px-1 py-1 ring-1 ring-blue-600 bg-blue-600 hover:bg-blue-700 text-white w-full" type="submit">Register</button>

@@ -6,7 +6,7 @@ const dbName = 'FUEL_PRICE_PROJECT';
 let cachedClient = null;
 
 export async function connectToDatabase() {
-  if (cachedClient && cachedClient.isConnected()) {
+  if (cachedClient) {
     return cachedClient;
   }
 
@@ -20,7 +20,7 @@ export async function connectToDatabase() {
 
     return client;
   } catch (error) {
-    console.error('Failed to connect to database:', error);
+    console.error('Failed to connect to the database:', error);
     throw error;
   }
 }
