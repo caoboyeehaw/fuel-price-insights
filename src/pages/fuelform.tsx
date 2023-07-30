@@ -1,17 +1,18 @@
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { Session } from 'next-auth';
+import { useSession as useNextAuthSession } from 'next-auth/react';
+
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
-import { useState } from 'react';
 
-
+interface CustomSession extends Session {
+  userId: string;
+}
 
 const Fuel_quote = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-
-  const onSubmit = async (data) => {
-    // submit form data
-  };
-  
+  const { data: session, status } = useNextAuthSession();
   const [form, setForm] = useState({
     gallonsRequested: '',
     deliveryState: '', 
@@ -19,12 +20,34 @@ const Fuel_quote = () => {
     suggestedPrice: 0,
     totalAmountDue: 0
   });
-
   const [quote, setQuote] = useState({
     suggestedPrice: 0,
     totalAmountDue: 0
   });
 
+  if (status === 'loading') {
+    return null;
+  }
+
+  const userId = session?.user;
+
+  const onSubmit = async (data) => {
+    // include userId when submitting form data
+    const response = await fetch('/api/submitFuelQuote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...data, userId }),
+    });
+
+    if (!response.ok) {
+      // handle error
+    }
+
+    // handle success
+  };
+  
   const handleInputChange = (event) => {
     const {name, value} = event.target;
     setForm({
@@ -60,9 +83,10 @@ const Fuel_quote = () => {
   }
 
 
+
   return (
     <div className="flex flex-col min-h-screen py-20">
-      <Navbar />
+      {session?.user ? <NavbarAuth /> : <Navbar />}
       <div className="flex flex-col items-center justify-start p-4">
         <div className="w-full max-w-lg mt-4 border border-gray-200 rounded-md bg-white p-6 shadow-lg">
           <h1 className="text-2xl font-semibold mb-4 text-center ">
@@ -93,7 +117,7 @@ const Fuel_quote = () => {
               {errors.deliveryAddress && <p className="text-red-500 text-sm">This field is required</p>}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-2">
               <label className="block text-gray-700 font-medium mb-2">
                 Delivery Date:
               </label>
@@ -105,29 +129,7 @@ const Fuel_quote = () => {
               {errors.deliveryDate && <p className="text-red-500 text-sm">This field is required</p>}
             </div>
 
-            <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2 ">
-                Suggested Price / Gallon:
-              </label>
-              <input 
-                className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                type="number" 
-                {...register('ppg')} 
-                readOnly 
-              />
-            </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2 ">
-                Total Amount Due:
-              </label>
-              <input 
-                className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 "
-                type="number" 
-                {...register('totalAmountDue')} 
-                readOnly 
-              />
-            </div>
 
             <div>
               <button
@@ -136,6 +138,30 @@ const Fuel_quote = () => {
               >
                 Get Quote
               </button>
+            </div>
+
+            <div className="mb-4 mt-8">
+            <label className="block text-gray-700 font-medium mb-2 ">
+                Suggested Price / Gallon:
+              </label>
+              <input 
+                className="border border-gray-300 p-2 w-full rounded focus:ring-1 bg-gray-200 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                type="number" 
+                {...register('ppg')} 
+                readOnly 
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700  font-medium mb-2 ">
+                Total Amount Due:
+              </label>
+              <input 
+                className="border border-gray-300 p-2 w-full rounded focus:ring-1 bg-gray-200 focus:outline-none focus:ring-blue-500 focus:border-blue-500 "
+                type="number" 
+                {...register('totalAmountDue')} 
+                readOnly 
+              />
             </div>
 
             <div>
@@ -147,15 +173,12 @@ const Fuel_quote = () => {
               </button>
             </div>
 
-
-
-
-
           </form>
 
         </div>
 
       </div>
+
     </div>
 
   );

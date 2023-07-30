@@ -6,10 +6,11 @@ import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 
+
 const Navbar = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalSignup, setShowModalSignup] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const router = useRouter();
@@ -18,56 +19,65 @@ const Navbar = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-
+  
     const result = await signIn('credentials', { 
         redirect: false, 
         email: data.email, 
         password: data.password 
     });
-
-if (result && result.error) {
-  console.log('Error:', result.error);
-} else if (result && !result.error) {
-  console.log('Sign in successful');
-  setShowModal(false);  // This line closes the modal after a successful login
-}
-}
-
-const onSubmitSignup = async (data) => {
-  console.log(data);
-
-  const response = await fetch('api/registration', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-  });
-
-  if (response.ok) {
-      const responseData = await response.json();
-      console.log(responseData);
-
-      // Authenticate the user after successful registration
-      const result = await signIn('credentials', { 
-          redirect: false, 
-          email: data.email, 
-          password: data.password 
-      });
-
-      if (!result?.error) {
-          console.log('Sign in successful');
-          // Here you can do a redirection or show a success message
-          setTimeout(() => setShowModalSignup(false), 2000);
-      } else {
-          console.log(result?.error);
-          // Here you can show an error message
-      }
-  } else {
-      const errorData = await response.json();
-      console.log(errorData);
+  
+    if (result && result.error) {
+      console.log('Error:', result.error);
+      setErrorMessage(result.error);
+    } else if (result && result.status === 200) {
+      console.log('Sign in successful');
+      setShowModal(false);  // This line closes the modal after a successful login
+      setErrorMessage(""); // Clear any previous error message
+    } else {
+      console.log('Login failed for an unknown reason');
+      setErrorMessage("Login failed for an unknown reason");
+    }
   }
-}
+  
+
+  const onSubmitSignup = async (data) => {
+    console.log(data);
+
+    const response = await fetch('api/registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        const responseData = await response.json();
+        console.log(responseData);
+
+        const userId = responseData.userId;
+        console.log('User ID:', userId);
+
+        // Authenticate the user after successful registration
+        const result = await signIn('credentials', { 
+            redirect: false, 
+            email: data.email, 
+            password: data.password 
+        });
+
+        if (!result?.error) {
+            console.log('Sign in successful');
+            // Here you can do a redirection or show a success message
+            setTimeout(() => setShowModalSignup(false), 2000);
+        } else {
+            console.log(result?.error);
+            // Here you can show an error message
+        }
+    } else {
+        const errorData = await response.json();
+        console.log(errorData);
+    }
+  }
 
 
   return (
@@ -137,6 +147,7 @@ const onSubmitSignup = async (data) => {
               </button>
 
               <form onSubmit={handleSubmit(onSubmit)} className="flex-grow">
+              {errorMessage && <p className="text-red-600 text-sm">{errorMessage}</p>}
                 <div className="mb-4">
                   <label className="text-black mb-1">Email Address:</label>
                   <div className="flex">
@@ -183,13 +194,13 @@ const onSubmitSignup = async (data) => {
         </div>
       )}
 
-{showModalSignup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
-    <div className="bg-white p-6 rounded-lg shadow-md flex flex-col relative">
-      <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
-        onClick={() => setShowModalSignup(false)}
-      >
+  {showModalSignup && (
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
+      <div className="bg-white p-6 rounded-lg shadow-md flex flex-col relative">
+        <button
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+          onClick={() => setShowModalSignup(false)}
+        >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
           <path
             fillRule="evenodd"
@@ -231,10 +242,10 @@ const onSubmitSignup = async (data) => {
               </div>
               {errors.password && <p className="text-red-600 text-sm">This field is required</p>}
             </div>
-
-        
-
+            
+    
             <div className="flex justify-end space-x-4 mt-5">
+              
               <button className="text-md rounded px-1 py-1 ring-1 ring-gray-400 bg-white hover:bg-gray-400 hover:text-white text-gray-400 w-full" onClick={() => setShowModalSignup(false)}>Cancel</button>  
               <button className="text-md rounded px-1 py-1 ring-1 ring-blue-600 bg-blue-600 hover:bg-blue-700 text-white w-full" type="submit">Register</button>
             </div>

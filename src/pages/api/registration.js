@@ -25,12 +25,13 @@ export default async function registrationHandler(req, res) {
       }
 
       // Inserting the new user into the database
-      await collection.insertOne({
+      const result = await collection.insertOne({
         email,
         password: hashedPassword,
       });
 
-      return res.status(200).json({ message: 'Registration successful' });
+      // Return the user's ID after successful registration
+      return res.status(200).json({ message: 'Registration successful', userId: result.insertedId });
     } else {
       return res.status(405).json({ error: 'Method not allowed' });
     }
@@ -39,5 +40,3 @@ export default async function registrationHandler(req, res) {
     res.status(500).json({ error: 'An unexpected error occurred.' });
   }
 }
-
-

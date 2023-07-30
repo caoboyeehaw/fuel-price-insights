@@ -43,16 +43,17 @@ export default NextAuth({
     },
     callbacks: {
         async jwt(token, user) {
-            if(user){
-              token.id = user._id.toString();     //email is used as id here. Maybe change it to db _id?
-            }
-            return token;
+          if (user) {
+            token.id = user.id;
+          }
+          return token;
         },
-        async session(session ,token){
-            session.userId = token.id;
-            return session;
+        async session(session, token) {
+          session.userId = token.id;
+          return session;
         },
-    },
+      }
+    
 });
 
 
