@@ -16,7 +16,7 @@ const Fuel_quote = () => {
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
   
   const [form, setForm] = useState({
-    userid:'null',
+    userid:'lmao',
     gallonsRequested: '',
     deliveryState: '', //set this to equal current user state info
     rateHistory: false,
