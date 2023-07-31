@@ -41,11 +41,11 @@ export default function Home() {
         <h1 className="text-2xl font-bold mb-4 text-center">Fuel Quote History</h1>
         <div className="space-y-4">
           <div>
-            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">Start Date:</label>
+            <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">Start Delivery Date:</label>
             <input type="date" id="start-date" value={startDate} onChange={handleStartDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
           <div>
-            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">End Date:</label>
+            <label htmlFor="end-date" className="block text-sm font-medium text-gray-700">End Delivery Date:</label>
             <input type="date" id="end-date" value={endDate} onChange={handleEndDateChange} className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded shadow-sm focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
           </div>
         </div>

@@ -1,8 +1,7 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';  // useEffect moved here
 import { Session } from 'next-auth';
 import { useSession as useNextAuthSession } from 'next-auth/react';
-
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 
@@ -15,15 +14,18 @@ const Fuel_quote = () => {
   const { data: session, status } = useNextAuthSession();
   const [isFormValid, setIsFormValid] = useState(false);
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
+  
   const [form, setForm] = useState({
+    userid:'null',
     gallonsRequested: '',
-    deliveryState: '', 
+    deliveryState: '', //set this to equal current user state info
     rateHistory: false,
     suggestedPrice: 0,
     totalAmountDue: 0,
     deliveryAddress: '',
     deliveryDate: ''
   });
+
   const [quote, setQuote] = useState({
     suggestedPrice: 0,
     totalAmountDue: 0
@@ -36,38 +38,52 @@ const Fuel_quote = () => {
   const userId = session?.user;
 
   const onSubmit = async (data) => {
-    // include userId when submitting form data
-    const response = await fetch('/api/submitFuelQuote', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ ...data, userId }),
-    });
+    const completeData = { ...data, userId, ...quote };
+    
+    try {
+        const response = await fetch('/api/submitFuelQuote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(completeData),
+        });
 
-    if (!response.ok) {
-      // handle error
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const responseJson = await response.json();
+
+        // handle success
+        console.log("Success:", responseJson);
+        alert("Form submitted successfully!");
+    } catch (error) {
+        // handle error
+        console.error("Error:", error);
+        alert("An error occurred while submitting the form.");
     }
-
-    // handle success
-  };
-  
+};
+    
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setForm({
-      ...form,
+    setForm(prevForm => ({
+      ...prevForm,
       [name]: value
-    });
-
+    }));
+  }
+  
+  useEffect(() => {
     setIsFormValid(
       form.gallonsRequested.trim() !== '' &&
       form.deliveryAddress.trim() !== '' &&
       form.deliveryDate.trim() !== ''
     );
-  }
+  }, [form]);
 
 
-  const handleGetQuote = () => {
+  const handleGetQuote = (event) => {
+    event.preventDefault();
 
     const currentPrice = 1.50;
     let margin = currentPrice;
@@ -104,18 +120,19 @@ const Fuel_quote = () => {
             Fuel Quote Form
           </h1>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
                 Gallons Requested:
-              </label>
-              <input
+            </label>
+            <input
+                name="gallonsRequested"
                 className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                {...register('GallonNeeded', { required: true })}
-              />
-              {errors.GallonNeeded && (
-                <p className="text-red-500 text-sm">This field is required</p>
-              )}
-            </div>
+                type="text"
+                value={form.gallonsRequested}
+                onChange={handleInputChange}
+                required
+            />
+        </div>
 
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">
@@ -125,6 +142,7 @@ const Fuel_quote = () => {
                 className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 type="text"
                 {...register('deliveryAddress', { required: true })}
+                onChange={handleInputChange}
               />
               {errors.deliveryAddress && (
                 <p className="text-red-500 text-sm">This field is required</p>
@@ -139,6 +157,7 @@ const Fuel_quote = () => {
                 className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 type="date"
                 {...register('deliveryDate', { required: true })}
+                onChange={handleInputChange}
               />
               {errors.deliveryDate && (
                 <p className="text-red-500 text-sm">This field is required</p>
@@ -146,20 +165,23 @@ const Fuel_quote = () => {
             </div>
 
             <div>
+
             <button
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-4"
-                onClick={handleGetQuote}
-                disabled={!isFormValid}
-              >
-                Get Quote
-              </button>
+              className={`py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-4 
+                ${isFormValid ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-200 text-blue-600 cursor-not-allowed"}`}
+              onClick={handleGetQuote}
+              disabled={!isFormValid}
+            >
+              Get Quote
+            </button>
+
             </div>
 
             <div className="mb-4 mt-8">
               <label className="block text-gray-700 font-medium mb-2 ">
                 Suggested Price / Gallon:
               </label>
-              <span id="suggestedPriceDisplay">
+              <span id="suggestedPriceDisplay" className="text-2xl">
                 ${quote.suggestedPrice.toFixed(2)}
               </span>
             </div>
@@ -168,19 +190,20 @@ const Fuel_quote = () => {
               <label className="block text-gray-700 font-medium mb-2 ">
                 Total Amount Due:
               </label>
-              <span id="totalAmountDueDisplay">
+              <span id="totalAmountDueDisplay" className="text-2xl">
                 ${quote.totalAmountDue.toFixed(2)}
               </span>
             </div>
 
             <div>
             <button
-                className="bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-5"
-                type="submit"
-                disabled={!isQuoteButtonPressed}
-              >
-                Submit
-              </button>
+              className={`py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full mt-5 
+                ${isQuoteButtonPressed && isFormValid ? "bg-green-700 hover:bg-green-800 text-white" : "bg-green-200 text-green-600 cursor-not-allowed"}`}
+              type="submit"
+              disabled={!isQuoteButtonPressed || !isFormValid}
+            >
+              Submit
+            </button>
             </div>
           </form>
         </div>
