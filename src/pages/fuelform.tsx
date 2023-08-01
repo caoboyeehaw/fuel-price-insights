@@ -16,14 +16,19 @@ const Fuel_quote = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
 
+  const userId = session?.userId;
+
   useEffect(() => {
     getSession().then((session: CustomSession | null) => {
       setSession(session);
       setLoading(false);
     });
   }, []);
-
-  const userId = session?.userId;
+  
+  useEffect(() => {
+    register('suggestedPrice');
+    register('totalAmountDue');
+  }, [register]);
 
   const [form, setForm] = useState({
     //userid: userId, this is the real one, put it in after the test var
@@ -36,20 +41,23 @@ const Fuel_quote = () => {
     deliveryAddress: '',
     deliveryDate: ''
   });
-
+  
   const [quote, setQuote] = useState({
     suggestedPrice: 0,
     totalAmountDue: 0
   });
-
+  
   useEffect(() => {
-    register('suggestedPrice');
-    register('totalAmountDue');
-  }, [register]);
+    setIsFormValid(
+      form.gallonsRequested.trim() !== '' &&
+      form.deliveryAddress.trim() !== '' &&
+      form.deliveryDate.trim() !== ''
+    );
+  }, [form]);
 
   if (loading) {
     return null;
-}
+  }
 
   const onSubmit = async (data) => {
     if (!isQuoteButtonPressed) {
@@ -98,13 +106,7 @@ const Fuel_quote = () => {
     }));
   }
   
-  useEffect(() => {
-    setIsFormValid(
-      form.gallonsRequested.trim() !== '' &&
-      form.deliveryAddress.trim() !== '' &&
-      form.deliveryDate.trim() !== ''
-    );
-  }, [form]);
+
 
 
   const handleGetQuote = (event) => {
@@ -144,10 +146,9 @@ const Fuel_quote = () => {
   }
 
 
-
   return (
     <div className="flex flex-col min-h-screen py-20">
-      {session?.user ? <NavbarAuth /> : <Navbar />}
+      {session ? <NavbarAuth /> : <Navbar />}
       <div className="flex flex-col items-center justify-start p-4">
         <div className="w-full max-w-lg mt-4 border border-gray-200 rounded-md bg-white p-6 shadow-lg">
           <h1 className="text-2xl font-semibold mb-4 text-center ">

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
 
 
 const Navbar = () => {
@@ -102,6 +103,7 @@ const Navbar = () => {
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
               <div className="flex space-x-4 items-center">
+              
               {session ? (
                 <p>Authenticated</p>
               ) : (
