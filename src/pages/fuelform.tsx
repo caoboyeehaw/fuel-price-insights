@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Session } from 'next-auth';
-import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 
@@ -11,20 +11,14 @@ interface CustomSession extends Session {
 
 const Fuel_quote = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-  const [session, setSession] = useState<CustomSession | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
+  const loading = status === 'loading';
+
   const [isFormValid, setIsFormValid] = useState(false);
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
 
-  const userId = session?.userId;
+  const userId = (session as CustomSession)?.userId;
 
-  useEffect(() => {
-    getSession().then((session: CustomSession | null) => {
-      setSession(session);
-      setLoading(false);
-    });
-  }, []);
-  
   useEffect(() => {
     register('suggestedPrice');
     register('totalAmountDue');
@@ -46,7 +40,7 @@ const Fuel_quote = () => {
     suggestedPrice: 0,
     totalAmountDue: 0
   });
-  
+
   useEffect(() => {
     setIsFormValid(
       form.gallonsRequested.trim() !== '' &&
@@ -56,7 +50,7 @@ const Fuel_quote = () => {
   }, [form]);
 
   if (loading) {
-    return null;
+    return <div>Loading...</div>;
   }
 
   const onSubmit = async (data) => {
@@ -105,8 +99,6 @@ const Fuel_quote = () => {
       [name]: value
     }));
   }
-  
-
 
 
   const handleGetQuote = (event) => {

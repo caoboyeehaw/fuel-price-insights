@@ -17,7 +17,9 @@ const Navbar = () => {
   const router = useRouter();
 
   const { data: session } = useSession();
-
+  const loading = status === "loading";
+  console.log(session)
+  
   const onSubmit = async (data) => {
     console.log(data);
   
@@ -82,10 +84,14 @@ const Navbar = () => {
 
 
   return (
+    
     <div className="fixed top-0 left-0 right-0 z-1">
+
+
       <div className="container mx-auto pt-3 bg-gradient-to-b from-white to-white/0 bg-opacity-100"> 
         <div className="flex justify-center items-center">
           <nav className="flex justify-between items-center w-full">
+
             <div>
               <Link href="/">
                 <div className="text-sm text-green-700 flex items-center">
@@ -119,9 +125,14 @@ const Navbar = () => {
               </div>
 
           </nav>
+          
         </div>
       </div>
-      
+      <div className="flex justify-end px-10">
+            {loading && <p>Loading...</p>}
+            {!loading && !session && <p>User is not logged in</p>}
+            {!loading && session && <p>User is logged in</p>}
+          </div>
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
           <div className=" inset-0 flex items-center justify-center">

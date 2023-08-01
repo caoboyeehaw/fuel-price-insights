@@ -2,11 +2,16 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const { status } = useSession();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [fuelQuotes, setFuelQuotes] = useState<{deliveryDate: string, gallonsRequested: number, deliveryAddress: string, suggestedPrice: number, totalAmountDue: number, userid: string}[]>([]);
+
+
+  const loading = status === "loading";
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -70,18 +75,18 @@ export default function Home() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {fuelQuotes.length > 0 ? fuelQuotes.map((quote, index) => {
+            {fuelQuotes && fuelQuotes.length > 0 ? fuelQuotes.map((quote, index) => {
               const date = new Date(quote.deliveryDate).toLocaleDateString();
-              return (
-                <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap">{quote.userid}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{quote.gallonsRequested}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{quote.deliveryAddress}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{quote.suggestedPrice}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{quote.totalAmountDue}</td>
-                </tr>
-              );
+                return (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap">{quote.userid}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{date}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{quote.gallonsRequested}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{quote.deliveryAddress}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{quote.suggestedPrice}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{quote.totalAmountDue}</td>
+                  </tr>
+                );
             }) : (
               <tr>
                 <td className="px-6 py-4 whitespace-nowrap" colSpan={6}>No quotes found.</td>
