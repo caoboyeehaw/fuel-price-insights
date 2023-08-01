@@ -47,9 +47,9 @@ const Fuel_quote = () => {
     register('totalAmountDue');
   }, [register]);
 
-  if (status === 'loading') {
+  if (loading) {
     return null;
-  }
+}
 
   const onSubmit = async (data) => {
     if (!isQuoteButtonPressed) {
