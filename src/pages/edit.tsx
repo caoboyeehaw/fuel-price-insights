@@ -33,7 +33,7 @@ const RegistrationPage = () => {
     console.log(data);
 
     // Assuming you have the correct API endpoint for profile update
-    const response = await fetch('api/update-profile', {
+    const response = await fetch('api/editProf', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
