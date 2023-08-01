@@ -9,7 +9,7 @@ export default async (req, res) => {
 
   try {
     const db = await getDatabase();
-    const Fuel = db.collection('FUEL');  // Assuming 'fuel' is your collection name
+    const Fuel = db.collection('FUEL');  //FUEL is collection name
 
     // Convert startDate and endDate to Date objects
     let start = new Date(startDate).toISOString();

@@ -33,15 +33,15 @@ const RegistrationPage = () => {
       <div className="flex items-center justify-center min-h-screen ">
         <div className="container flex justify-center">
         <div className="bg-white p-14 rounded-lg shadow-md flex flex-col mr-6">
-            <h2 className="text-2xl font-bold mb-4">Current Information</h2>
-            <p className="mb-2"><strong>Name:</strong> </p>
-            <p className="mb-2"><strong>Email:</strong> </p>
-            <p className="mb-2"><strong>Address 1:</strong> </p>
-            <p className="mb-2"><strong>Address 2:</strong> </p>
-            <p className="mb-2"><strong>City:</strong> </p>
-            <p className="mb-2"><strong>State:</strong> </p>
-            <p className="mb-2"><strong>Zipcode:</strong> </p>
-          </div>
+          <h2 className="text-2xl font-bold mb-4">Current Information</h2>
+          <p className="mb-2"><strong>Name:</strong> </p>
+          <p className="mb-2"><strong>Email:</strong> </p>
+          <p className="mb-2"><strong>Address 1:</strong> </p>
+          <p className="mb-2"><strong>Address 2:</strong> </p>
+          <p className="mb-2"><strong>City:</strong> </p>
+          <p className="mb-2"><strong>State:</strong> </p>
+          <p className="mb-2"><strong>Zipcode:</strong> </p>
+        </div>
       <div className="bg-white p-14 rounded-lg shadow-md flex flex-col">
           <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
