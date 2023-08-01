@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
-import { getDatabase } from './api/db'
+import { getDatabase } from './api/db';
 
 const RegistrationPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  // const [showModal, setShowModal] = useState(false);
+  const { register, handleSubmit, formState: { errors, isDirty } } = useForm();
+  const [isFormFilled, setIsFormFilled] = useState(false);
+
+  const updateSaveButton = () => {
+    setIsFormFilled(isDirty);
+  };
+
+  useEffect(() => {
+    updateSaveButton();
+  }, [isDirty]);
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -42,9 +50,10 @@ const RegistrationPage = () => {
             <p className="mb-2"><strong>State:</strong> </p>
             <p className="mb-2"><strong>Zipcode:</strong> </p>
           </div>
-      <div className="bg-white p-14 rounded-lg shadow-md flex flex-col">
-          <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="bg-white p-14 rounded-lg shadow-md flex flex-col">
+            <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+            <h3>Enter all details again and press Save Changes</h3>
+            <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label htmlFor="fullName" className="text-black mb-1 flex justify-start">Full Name:</label>
               <input
@@ -85,6 +94,7 @@ const RegistrationPage = () => {
             {...register('address2', { maxLength: 100 })}
             className="border border-gray-300 rounded-md px-8 py-2 text-black"
           />
+          {errors.address2 && <p>This field is required</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="city" className="text-black mb-1 flex justify-start">City:</label>
@@ -97,32 +107,30 @@ const RegistrationPage = () => {
           {errors.city && <p>This field is required</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="state" className="text-black mb-1 flex justify-start">State:</label>
-          <select
-            id="state"
-            {...register('state', { required: true })}
-            className="border border-gray-300 rounded-md px-6 py-2 text-black"
-          >
-            <option value="">Select State</option>
-            <option value="AL">AL</option>
-            <option value="AK">AK</option>
-          </select>
-          {errors.state && <p>This field is required</p>}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="zipcode" className="text-black mb-1 flex justify-start">Zipcode:</label>
-          <input
-            type="text"
-            id="zipcode"
-            {...register('zipcode', { required: true, minLength: 5, maxLength: 9 })}
-            className="border border-gray-300 rounded-md px-8 py-2 text-black"
-          />
-          {errors.zipcode && <p>At least 5 characters required</p>}
-        </div>
-            <button className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white" type="submit">Save Changes</button>
-          </form>
-          
-          <form onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="state" className="text-black mb-1 flex justify-start">State:</label>
+                <select
+                  id="state"
+                  {...register('state', { required: true })}
+                  onChange={updateSaveButton} // Add the onChange event to trigger form validation
+                  className="border border-gray-300 rounded-md px-6 py-2 text-black"
+                >
+                  <option value="">Select State</option>
+                  <option value="AL">AL</option>
+                  <option value="AK">AK</option>
+                </select>
+                {errors.state && <p>This field is required</p>}
+              </div>
+
+              <button
+                className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
+                type="submit"
+                disabled={!isFormFilled}
+              >
+                Save Changes
+              </button>
+            </form>
+
+            <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
               <label className="text-black mb-1">Current Password:</label>
               <div className="flex">
@@ -145,11 +153,16 @@ const RegistrationPage = () => {
               </div>
               {errors.password && <p>This field is required</p>}
             </div>
-            <button className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white" type="submit">Change Password</button>
-          </form>
+            <button
+                className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
+                type="submit"
+              >
+                Change Password
+              </button>
+            </form>
+          </div>
         </div>
-    </div>
-    </div>
+      </div>
     </div>
   );
 };
