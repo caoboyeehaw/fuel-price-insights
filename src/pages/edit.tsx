@@ -19,11 +19,11 @@ const RegistrationPage = () => {
 
   useEffect(() => {
     const isAllFieldsFilled = (
-      form.fullName.trim() !== '' &&
-      form.email.trim() !== '' &&
-      form.address1.trim() !== '' &&
-      form.city.trim() !== '' &&
-      form.state.trim() !== '' &&
+      form.fullName.trim() !== '' ||
+      form.email.trim() !== '' ||
+      form.address1.trim() !== '' ||
+      form.city.trim() !== '' ||
+      form.state.trim() !== '' ||
       form.zip.trim() !== ''
     );
     setIsFormFilled(isAllFieldsFilled);
@@ -240,27 +240,27 @@ const RegistrationPage = () => {
             </form>
 
             <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
-              <div className="mb-4">
+            <div className="mb-4">
               <label className="text-black mb-1">Current Password:</label>
               <div className="flex">
                 <input
                   type="password"
-                  {...register('password', { required: true })}
+                  {...register('currentPassword', { required: true })}
                   className="border border-gray-300 rounded-md px-3 py-2 text-black"
                 />
               </div>
-              {errors.password && <p>This field is required</p>}
+              {errors.currentPassword && <p>This field is required</p>}
             </div>
             <div className="mb-4">
               <label className="text-black mb-1">New Password:</label>
               <div className="flex">
                 <input
                   type="password"
-                  {...register('password', { required: true })}
+                  {...register('newPassword', { required: true })}
                   className="border border-gray-300 rounded-md px-3 py-2 text-black"
                 />
               </div>
-              {errors.password && <p>This field is required</p>}
+              {errors.newPassword && <p>This field is required</p>}
             </div>
             <button
                 className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
