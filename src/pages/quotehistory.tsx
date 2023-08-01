@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
+import { useEffect } from 'react';
 
 export default function Home() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [fuelQuotes, setFuelQuotes] = useState<{date: string, gallons: number, clientLocation: string, fuelRate: number, finalPrice: number}[]>([]);
+  const [fuelQuotes, setFuelQuotes] = useState<{deliveryDate: string, gallonsRequested: number, deliveryAddress: string, suggestedPrice: number, totalAmountDue: number, userid: string}[]>([]);
 
   const handleStartDateChange = (event) => {
     setStartDate(event.target.value);
@@ -16,22 +17,23 @@ export default function Home() {
   };
 
   // Function to generate sample fuel price quotes
-  const generateSampleFuelQuotes = () => {
-    const sampleQuotes = [
-      {
-        date: '2023-06-01',
-        gallons: 50,
-        clientLocation: 'New York',
-        fuelRate: 2.5,
-        finalPrice: 125
-      },
-      // Add more sample quotes here
-    ];
-    const filteredQuotes = sampleQuotes.filter((quote) => {
-        return quote.date >= startDate && quote.date <= endDate;
-      });
-    setFuelQuotes(filteredQuotes);
+  const generateSampleFuelQuotes = async () => {
+    try {
+      const res = await fetch(`/api/getFuelQuotes?startDate=${startDate}&endDate=${endDate}`);
+      const { data } = await res.json();
+  
+      console.log(data);  // Log the data to the console
+  
+      setFuelQuotes(data);
+    } catch (err) {
+      console.error(err);
+    }
+    
   };
+  useEffect(() => {
+    console.log(fuelQuotes);
+  }, [fuelQuotes]);
+
 
   return (
     <div className="flex flex-col py-20">
@@ -39,6 +41,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-start pt-4 min-h-screen ">
             <div className="mt-4 border-gray-200 border rounded bg-white p-6 shadow-lg">
         <h1 className="text-2xl font-bold mb-4 text-center">Fuel Quote History</h1>
+        <div className="space-y-4">
         <div className="space-y-4">
           <div>
             <label htmlFor="start-date" className="block text-sm font-medium text-gray-700">Start Delivery Date:</label>
@@ -54,9 +57,11 @@ export default function Home() {
             Retrieve Quote History
           </button>
         </div>
+        </div>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"># of Gallons</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client Location</th>
@@ -65,20 +70,24 @@ export default function Home() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {fuelQuotes.length > 0 ? fuelQuotes.map((quote, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">{quote.date}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{quote.gallons}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{quote.clientLocation}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{quote.fuelRate}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{quote.finalPrice}</td>
-              </tr>
-            )) : (
+            {fuelQuotes.length > 0 ? fuelQuotes.map((quote, index) => {
+              const date = new Date(quote.deliveryDate).toLocaleDateString();
+              return (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap">{quote.userid}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{date}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quote.gallonsRequested}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quote.deliveryAddress}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quote.suggestedPrice}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{quote.totalAmountDue}</td>
+                </tr>
+              );
+            }) : (
               <tr>
-                <td className="px-6 py-4 whitespace-nowrap" colSpan={5}>No quotes found.</td>
+                <td className="px-6 py-4 whitespace-nowrap" colSpan={6}>No quotes found.</td>
               </tr>
             )}
-          </tbody>
+        </tbody>
         </table>
       </div>
       </div>
