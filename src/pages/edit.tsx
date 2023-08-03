@@ -78,8 +78,13 @@ const RegistrationPage = () => {
       // Reset the password fields after successful submission
       setForm({
         ...form,
-        password: '',
-        newPassword: '',
+        fullName: '',
+        email: '',
+        address1: '',
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
       });
     } else {
       const errorData = await response.json();
