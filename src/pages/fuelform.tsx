@@ -1,7 +1,7 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';  // useEffect moved here
 import { Session } from 'next-auth';
-import { useSession as useNextAuthSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 
@@ -10,35 +10,59 @@ interface CustomSession extends Session {
 }
 
 const Fuel_quote = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { data: session, status } = useNextAuthSession();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const { data: session, status } = useSession();
+  const loading = status === 'loading';
+
   const [isFormValid, setIsFormValid] = useState(false);
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
-  
+
+  const userId = (session as CustomSession)?.userId;
+
+  useEffect(() => {
+    register('suggestedPrice');
+    register('totalAmountDue');
+  }, [register]);
+
   const [form, setForm] = useState({
-    userid:'lmao',
+    //userid: userId, this is the real one, put it in after the test var
+    userid: 'test user',
     gallonsRequested: '',
-    deliveryState: '', //set this to equal current user state info
+    deliveryState: '', 
     rateHistory: false,
     suggestedPrice: 0,
     totalAmountDue: 0,
     deliveryAddress: '',
     deliveryDate: ''
   });
-
+  
   const [quote, setQuote] = useState({
     suggestedPrice: 0,
     totalAmountDue: 0
   });
 
-  if (status === 'loading') {
-    return null;
+  useEffect(() => {
+    setIsFormValid(
+      form.gallonsRequested.trim() !== '' &&
+      form.deliveryAddress.trim() !== '' &&
+      form.deliveryDate.trim() !== ''
+    );
+  }, [form]);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  const userId = session?.user;
-
   const onSubmit = async (data) => {
-    const completeData = { ...data, userId, ...quote };
+    if (!isQuoteButtonPressed) {
+      alert("Please click the 'Get Quote' button before submitting the form.");
+      return;
+    }
+  
+      // Convert deliveryDate to ISODate format
+      const deliveryDate = new Date(data.deliveryDate).toISOString();
+
+      const completeData = { ...data, ...form, deliveryDate };  // Include the formatted deliveryDate
     
     try {
         const response = await fetch('/api/submitFuelQuote', {
@@ -48,13 +72,13 @@ const Fuel_quote = () => {
             },
             body: JSON.stringify(completeData),
         });
-
+  
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const responseJson = await response.json();
-
+  
         // handle success
         console.log("Success:", responseJson);
         alert("Form submitted successfully!");
@@ -63,57 +87,60 @@ const Fuel_quote = () => {
         console.error("Error:", error);
         alert("An error occurred while submitting the form.");
     }
-};
+    
+  };
+  
     
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    setValue(name, value);
     setForm(prevForm => ({
       ...prevForm,
       [name]: value
     }));
   }
-  
-  useEffect(() => {
-    setIsFormValid(
-      form.gallonsRequested.trim() !== '' &&
-      form.deliveryAddress.trim() !== '' &&
-      form.deliveryDate.trim() !== ''
-    );
-  }, [form]);
 
 
   const handleGetQuote = (event) => {
     event.preventDefault();
-
+  
     const currentPrice = 1.50;
     let margin = currentPrice;
-
+  
     const locationFactor = form.deliveryState === 'Texas' ? 0.02 : 0.04;
     const rateHistoryFactor = form.rateHistory ? 0.01 : 0;
     
     const gallonsRequested = parseInt(form.gallonsRequested); 
     const gallonsRequestedFactor = gallonsRequested > 1000 ? 0.02 : 0.03;
-
+  
     const companyProfitFactor = 0.1;
     margin *= (locationFactor - rateHistoryFactor + gallonsRequestedFactor + companyProfitFactor);
-
+  
     const suggestedPrice = currentPrice + margin;
     const totalAmountDue = suggestedPrice * gallonsRequested;
-
-    // Update quote state
+  
     setQuote({
-
       suggestedPrice: suggestedPrice,
       totalAmountDue: totalAmountDue
     });
+  
+    // Update form values
+    setValue('suggestedPrice', suggestedPrice);
+    setValue('totalAmountDue', totalAmountDue);
+  
+    setForm(prevForm => ({
+      ...prevForm,
+      suggestedPrice: suggestedPrice,
+      totalAmountDue: totalAmountDue
+    }));
+  
     setIsQuoteButtonPressed(true);
   }
 
 
-
   return (
     <div className="flex flex-col min-h-screen py-20">
-      {session?.user ? <NavbarAuth /> : <Navbar />}
+      {session ? <NavbarAuth /> : <Navbar />}
       <div className="flex flex-col items-center justify-start p-4">
         <div className="w-full max-w-lg mt-4 border border-gray-200 rounded-md bg-white p-6 shadow-lg">
           <h1 className="text-2xl font-semibold mb-4 text-center ">
@@ -125,12 +152,11 @@ const Fuel_quote = () => {
                 Gallons Requested:
             </label>
             <input
-                name="gallonsRequested"
-                className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                type="text"
-                value={form.gallonsRequested}
-                onChange={handleInputChange}
-                required
+              className="border border-gray-300 p-2 w-full rounded focus:ring-1 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              type="number"
+              value={form.gallonsRequested}
+              {...register('gallonsRequested', { required: true })}
+              onChange={handleInputChange}                
             />
         </div>
 

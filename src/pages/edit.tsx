@@ -92,6 +92,7 @@ const RegistrationPage = () => {
       <Navbar />
       <div className="flex items-center justify-center min-h-screen ">
         <div className="container flex justify-center">
+
           <div className="bg-white p-14 rounded-lg shadow-md flex flex-col mr-6">
             {/* Display current information from the form state */}
             <h2 className="text-2xl font-bold mb-4">Current Information</h2>
@@ -108,6 +109,7 @@ const RegistrationPage = () => {
             <h3>Enter all details again and press Save Changes</h3>
             <form onSubmit={handleSubmit(onSubmitProfile)}>
               <div className="mb-4">
+
               <label htmlFor="fullName" className="text-black mb-1 flex justify-start">Full Name:</label>
               <input
               //i think its not submutting because of the the type, check later, check with login.tsx because it works
