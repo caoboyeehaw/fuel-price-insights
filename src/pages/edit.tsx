@@ -1,36 +1,37 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; 
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
-import { getDatabase } from './api/db';
 
 const RegistrationPage = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm(); // Use the reset function here
   const [isFormFilled, setIsFormFilled] = useState(false);
 
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     address1: '',
-    address2: '', // Added address2 to the form state
+    address2: '', 
     city: '',
     state: '',
-    zip: '', // Changed zip to be a string to allow non-numeric characters
+    zip: '', 
   });
 
   useEffect(() => {
     const isAllFieldsFilled = (
-      form.fullName.trim() !== '' ||
-      form.email.trim() !== '' ||
-      form.address1.trim() !== '' ||
-      form.city.trim() !== '' ||
-      form.state.trim() !== '' ||
+      form.fullName.trim() !== '' &&
+      form.email.trim() !== '' &&
+      form.address1.trim() !== '' &&
+      form.city.trim() !== '' &&
+      form.state.trim() !== '' &&
       form.zip.trim() !== ''
     );
     setIsFormFilled(isAllFieldsFilled);
   }, [form]);
 
-  const onSubmitProfile = async (data) => {
-    console.log(data);
+  const formRef = useRef<HTMLFormElement | null>(null); // Specify the type as HTMLFormElement | null
+
+  const onSubmitProfile = async (formData) => {
+    console.log(formData);
 
     // Assuming you have the correct API endpoint for profile update
     const response = await fetch('api/editProf', {
@@ -38,22 +39,14 @@ const RegistrationPage = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(formData),
     });
 
     if (response.ok) {
       const responseData = await response.json();
       console.log(responseData);
       // Reset the form fields after successful submission
-      setForm({
-        fullName: '',
-        email: '',
-        address1: '',
-        address2: '',
-        city: '',
-        state: '',
-        zip: '',
-      });
+      reset(); // Use reset function from useForm
     } else {
       const errorData = await response.json();
       console.log(errorData);
@@ -111,8 +104,8 @@ const RegistrationPage = () => {
           </div>
           <div className="bg-white p-14 rounded-lg shadow-md flex flex-col">
             <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-            <h3>Enter all details again and press Save Changes</h3>
-            <form onSubmit={handleSubmit(onSubmitProfile)}>
+            <h3 className="font-bold">Enter all details again and press Save Changes</h3>
+            <form onSubmit={handleSubmit(onSubmitProfile)} ref={formRef}>
               <div className="mb-4">
 
               <label htmlFor="fullName" className="text-black mb-1 flex justify-start">Full Name:</label>
@@ -235,16 +228,16 @@ const RegistrationPage = () => {
             {...register('zip', { required: true, maxLength: 5 })}
             className="border border-gray-300 rounded-md px-8 py-2 text-black"
           />
-          {errors.city && <p>This field is required</p>}
+          {errors.zip && <p>This field is required</p>}
         </div>
         <button
-                className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
-                type="submit"
-                disabled={!isFormFilled}
-              >
-                Save Changes
-              </button>
-            </form>
+            className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
+            type="submit"
+            disabled={!isFormFilled}
+            >
+              Save Changes
+        </button>
+      </form>
 
             <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
             <div className="mb-4">
