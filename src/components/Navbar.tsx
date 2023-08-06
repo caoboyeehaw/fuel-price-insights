@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const router = useRouter();
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const loading = status === "loading";
   console.log(session)
   
@@ -33,7 +33,7 @@ const Navbar = () => {
       console.log('Error:', result.error);
       setErrorMessage(result.error);
     } else if (result && result.status === 200) {
-      console.log('Sign in successful');
+      console.log('Log in successful');
       setShowModal(false);  // This line closes the modal after a successful login
       setErrorMessage(""); // Clear any previous error message
     } else {
@@ -69,7 +69,7 @@ const Navbar = () => {
         });
 
         if (!result?.error) {
-            console.log('Sign in successful');
+            console.log('Sign up successful');
             // Here you can do a redirection or show a success message
             setTimeout(() => setShowModalSignup(false), 2000);
         } else {
@@ -86,7 +86,6 @@ const Navbar = () => {
   return (
     
     <div className="fixed top-0 left-0 right-0 z-1">
-
 
       <div className="container mx-auto pt-3 bg-gradient-to-b from-white to-white/0 bg-opacity-100"> 
         <div className="flex justify-center items-center">

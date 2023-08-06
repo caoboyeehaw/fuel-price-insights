@@ -2,13 +2,20 @@ import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 import { useEffect } from 'react';
+import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 
+interface CustomSession extends Session {
+  userId: string;
+}
+
 export default function Home() {
-  const { status } = useSession();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [fuelQuotes, setFuelQuotes] = useState<{deliveryDate: string, gallonsRequested: number, deliveryAddress: string, suggestedPrice: number, totalAmountDue: number, userid: string}[]>([]);
+
+  const { data: session, status } = useSession();
+  const userId = (session as CustomSession)?.userId;
 
 
   const loading = status === "loading";
@@ -42,7 +49,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col py-20">
-        <Navbar />
+        {session ? <NavbarAuth /> : <Navbar />}
         <div className="flex flex-col items-center justify-start pt-4 min-h-screen ">
             <div className="mt-4 border-gray-200 border rounded bg-white p-6 shadow-lg">
         <h1 className="text-2xl font-bold mb-4 text-center">Fuel Quote History</h1>

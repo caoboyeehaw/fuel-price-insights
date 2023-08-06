@@ -48,23 +48,36 @@ export default NextAuth({
       jwt: true,
   },
   callbacks: {
-    jwt: async function (token, user) {
-      console.log('jwt callback', token, user);
-      if (user) {
-        token.id = user.id;
-      } else if (token.token && token.token.user) {
-        token.id = token.token.user.id;
+    callbacks: {
+      jwt: async function (token, user) {
+        console.log('jwt callback', token, user);
+        if (user) {
+          console.log('User is defined', user);
+          token.id = user.id;
+        } else if (token.token && token.token.sub) {
+          console.log('token.token.sub is defined', token.token.sub);
+          token.id = token.token.sub;
+        } else {
+          console.log('User and token.token.sub are undefined');
+        }
+        return token;
+      },
+      session: async function (session, token) {
+        console.log('session callback', session, token);
+        if (session) {
+          if (token.token && token.token.sub) {
+            session.userId = token.token.sub;
+          } else {
+            console.log('token.token.sub is undefined');
+          }
+        }
+        return session;
       }
-      return token;
-    },
-    session: async function (session, token) {
-      console.log('session callback', session, token);
-      if (session) {
-        session.userId = token.id;
-      }
-      return session;
-    }
   }
+  
+    
+  }
+  
     
 });
 

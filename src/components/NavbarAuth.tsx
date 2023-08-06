@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
+
 
 const NavbarAuth = () => {
   const [showModal, setShowModal] = useState(false);
@@ -96,9 +98,9 @@ const NavbarAuth = () => {
             <div onClick={() => setShowModalSignup(true)} className="  hover:text-white text-black text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
               <span className="mx-auto cursor-pointer">Profile Settings</span>
             </div>
-              <div className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
-                <span className="mx-auto cursor-pointer">Sign Out</span>
-              </div>
+            <div onClick={() => signOut({ callbackUrl: '/' })} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">
+              <span className="mx-auto cursor-pointer">Sign Out</span>
+            </div>
             </div>
           </nav>
         </div>

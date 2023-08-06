@@ -1,11 +1,20 @@
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 import Link from 'next/link';
+import { Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
+
+interface CustomSession extends Session {
+  userId: string;
+}
+
 
 export default function Home() {
+  const { data: session, status } = useSession();
+const userId = (session as CustomSession)?.userId;
   return (
     <div className="flex flex-col min-h-screen bg-white justify-center items-center">
-      <NavbarAuth />
+      {session ? <NavbarAuth /> : <Navbar />}
       <div className="w-full">
         <div className="bg-cover bg-center h-screen" 
             style={{ backgroundImage: "url('https://example.com/path-to-your-image.jpg')" }}>
