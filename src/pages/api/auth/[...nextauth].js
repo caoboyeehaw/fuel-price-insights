@@ -63,11 +63,15 @@ export default NextAuth({
       session: async function (session, token) {
         console.log('In session callback, session and token are', session, token);
         if (session) {
-          session.user.email = token.email;
-          console.log('In session callback, after adding email to session, session is', session);
+          if (token) {
+            session.user.email = token.email;
+            console.log('In session callback, after adding email to session, session is', session);
+          } else {
+            console.error('Token is undefined in session callback');
+          }
         }
         return session;
-      }
+    }
     }
 //}
 

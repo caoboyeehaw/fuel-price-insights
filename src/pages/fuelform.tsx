@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Session } from 'next-auth';
+import { NextRouter } from 'next/router';
+
+import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
+
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
-import { getSession } from 'next-auth/react';
-import { NextRouter } from 'next/router';
 
 
 interface CustomSession extends Session {
@@ -91,10 +93,11 @@ const Fuel_quote = () => {
       // handle success
       console.log("Success:", responseJson);
       alert("Form submitted successfully!");
+
     } catch (error) {
-        // handle error
-        console.error("Error:", error);
-        alert("An error occurred while submitting the form.");
+      // handle error
+      console.error("Error:", error);
+      alert("An error occurred while submitting the form.");
     }
     
   };
@@ -166,8 +169,8 @@ const Fuel_quote = () => {
               {...register('gallonsRequested', { required: true })}
               onChange={handleInputChange}                
             />
-        </div>
 
+          </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">
                 Delivery Address:
@@ -197,7 +200,6 @@ const Fuel_quote = () => {
                 <p className="text-red-500 text-sm">This field is required</p>
               )}
             </div>
-
             <div>
 
             <button
