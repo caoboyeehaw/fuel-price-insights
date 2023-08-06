@@ -4,6 +4,7 @@ import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
+import { getSession } from 'next-auth/react';
 
 interface CustomSession extends Session {
   userId: string;
@@ -17,7 +18,14 @@ const Fuel_quote = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isQuoteButtonPressed, setIsQuoteButtonPressed] = useState(false);
 
-  const userId = (session as CustomSession)?.userId;
+  useEffect(() => {
+    if (session) {
+      setForm(prevForm => ({
+        ...prevForm,
+        userid: (session as CustomSession)?.userId,
+      }));
+    }
+  }, [session]);
 
   useEffect(() => {
     register('suggestedPrice');
@@ -25,8 +33,7 @@ const Fuel_quote = () => {
   }, [register]);
 
   const [form, setForm] = useState({
-    //userid: userId, this is the real one, put it in after the test var
-    userid: 'test user',
+    userid: '', // this is the correct initial value
     gallonsRequested: '',
     deliveryState: '', 
     rateHistory: false,

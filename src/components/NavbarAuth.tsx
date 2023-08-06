@@ -95,7 +95,7 @@ const NavbarAuth = () => {
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
             </div>
             <div className="flex space-x-4 items-center">
-            <div onClick={() => setShowModalSignup(true)} className="  hover:text-white text-black text-md flex items-center rounded-md px-4 py-1  hover:bg-blue-700 ">
+            <div onClick={() => setShowModalSignup(true)} className="   text-gray-600 text-md flex items-center rounded-md px-4 py-2  hover:bg-gray-100 hover:text-black">
               <span className="mx-auto cursor-pointer">Profile Settings</span>
             </div>
             <div onClick={() => signOut({ callbackUrl: '/' })} className="ring-2 ring-green-700 hover:ring-green-800 text-md flex items-center rounded-md hover:shadow-none px-4 py-1 bg-green-700 hover:bg-green-800 text-white">

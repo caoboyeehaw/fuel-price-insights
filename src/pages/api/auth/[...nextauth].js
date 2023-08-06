@@ -4,11 +4,11 @@ import { getDatabase } from '../db';
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb'
 
-//const id = new ObjectId(userIdAsString);
+
 
 export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
-  
+
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -17,7 +17,7 @@ export default NextAuth({
           password: { label: "Password", type: "password" }
       },
 
-      //auth needd some work
+
       authorize: async (credentials) => {
         const { email, password } = credentials;
 
@@ -47,6 +47,7 @@ export default NextAuth({
   session: {
       jwt: true,
   },
+
   callbacks: {
     callbacks: {
       jwt: async function (token, user) {
@@ -65,20 +66,13 @@ export default NextAuth({
       session: async function (session, token) {
         console.log('session callback', session, token);
         if (session) {
-          if (token.token && token.token.sub) {
-            session.userId = token.token.sub;
-          } else {
-            console.log('token.token.sub is undefined');
-          }
+          session.userId = token.id;
         }
         return session;
       }
+    }
   }
-  
-    
-  }
-  
-    
+
 });
 
 
