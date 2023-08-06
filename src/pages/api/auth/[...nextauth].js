@@ -49,7 +49,6 @@ export default NextAuth({
     jwt: true,
   },
 
-  //callbacks: {
     callbacks: {
       jwt: async function (token, user) {
         console.log('In jwt callback, token and user are', token, user);
@@ -73,8 +72,9 @@ export default NextAuth({
         return session;
     }
     }
-//}
+
 
 });
+
 
 

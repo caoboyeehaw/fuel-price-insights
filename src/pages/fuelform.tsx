@@ -11,7 +11,7 @@ import NavbarAuth from '../components/NavbarAuth';
 
 
 interface CustomSession extends Session {
-  userId: string;
+  email: string;
 }
 
 const Fuel_quote = () => {
@@ -26,7 +26,7 @@ const Fuel_quote = () => {
     if (session) {
       setForm(prevForm => ({
         ...prevForm,
-        userid: (session as CustomSession)?.userId,
+        userid: (session as CustomSession)?.email,
       }));
     }
   }, [session]);

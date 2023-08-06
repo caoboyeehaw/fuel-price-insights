@@ -9,7 +9,7 @@ export default async function submitFuelQuoteHandler(req, res) {
     if (!session) {
       return res.status(401).json({ message: "Not authenticated" });
     }
-    const userId = session.userId;
+    const email = session.user.email; 
 
     const db = await getDatabase();
     const collection = db.collection('FUEL');
@@ -22,7 +22,7 @@ export default async function submitFuelQuoteHandler(req, res) {
       }
 
       // Inserting the new quote into the database
-      const result = await collection.insertOne({ ...quoteData, userId });
+      const result = await collection.insertOne({ ...quoteData, email });
 
       // Return a success message after successful submission
       return res.status(200).json({ message: 'Quote submitted successfully (testing from api src\pages\api\submitFuelQuote.js)', quoteId: result.insertedId });
