@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
 
 const RegistrationPage = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm(); // Use the reset function here
+  const { register, handleSubmit, formState: { errors, isValid }, reset } = useForm(); 
   const [isFormFilled, setIsFormFilled] = useState(false);
 
   const [form, setForm] = useState({
@@ -16,6 +16,8 @@ const RegistrationPage = () => {
     zip: '', 
   });
 
+  const formRef = useRef<HTMLFormElement | null>(null); // Specify the type as HTMLFormElement | null
+
   useEffect(() => {
     const isAllFieldsFilled = (
       form.fullName.trim() !== '' &&
@@ -27,8 +29,6 @@ const RegistrationPage = () => {
     );
     setIsFormFilled(isAllFieldsFilled);
   }, [form]);
-
-  const formRef = useRef<HTMLFormElement | null>(null); // Specify the type as HTMLFormElement | null
 
   const onSubmitProfile = async (formData) => {
     console.log(formData);
@@ -45,6 +45,10 @@ const RegistrationPage = () => {
     if (response.ok) {
       const responseData = await response.json();
       console.log(responseData);
+
+      // Update the "form" state with the new form data received
+      setForm(formData);
+
       // Reset the form fields after successful submission
       reset(); // Use reset function from useForm
     } else {
@@ -55,7 +59,6 @@ const RegistrationPage = () => {
 
   const onSubmitPasswordChange = async (data) => {
     console.log(data);
-
     // Assuming you have the correct API endpoint for password change
     const response = await fetch('api/change-password', {
       method: 'POST',
@@ -90,7 +93,6 @@ const RegistrationPage = () => {
       <Navbar />
       <div className="flex items-center justify-center min-h-screen ">
         <div className="container flex justify-center">
-
           <div className="bg-white p-14 rounded-lg shadow-md flex flex-col mr-6">
             {/* Display current information from the form state */}
             <h2 className="text-2xl font-bold mb-4">Current Information</h2>
@@ -105,7 +107,7 @@ const RegistrationPage = () => {
           <div className="bg-white p-14 rounded-lg shadow-md flex flex-col">
             <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
             <h3 className="font-bold">Enter all details again and press Save Changes</h3>
-            <form onSubmit={handleSubmit(onSubmitProfile)} ref={formRef}>
+            <form onSubmit={handleSubmit(onSubmitProfile)}>
               <div className="mb-4">
 
               <label htmlFor="fullName" className="text-black mb-1 flex justify-start">Full Name:</label>
@@ -231,15 +233,18 @@ const RegistrationPage = () => {
           {errors.zip && <p>This field is required</p>}
         </div>
         <button
-            className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
-            type="submit"
-            disabled={!isFormFilled}
-            >
-              Save Changes
-        </button>
-      </form>
-
+                className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
+                type="submit"
+                disabled={!isValid} // Use isValid from useForm
+              >
+                Save Changes
+              </button>
+            </form>
             <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
+    </form>
+
+    <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
+      
             <div className="mb-4">
               <label className="text-black mb-1">Current Password:</label>
               <div className="flex">

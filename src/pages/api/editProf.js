@@ -8,29 +8,40 @@ export default async function editProfHandler(req, res) {
     if (req.method === 'POST') {
       const clientData = req.body;
 
-      if (!clientData) {
-        return res.status(400).json({ error: 'No quote data provided' });
+      // Check if clientData contains all required properties
+      const requiredFields = ['name', 'email', 'address1', 'address2', 'city', 'state', 'zipcode', 'password'];
+
+      for (const field of requiredFields) {
+        if (!clientData[field]) {
+          return res.status(400).json({ error: `Missing or invalid ${field}` });
+        }
       }
 
-      // Inserting the new quote into the database
-      const updateResult = await collection.updateMany(
-        { name: { $in: ['Guy Fieri'] } }, // Filter to find the documents to update
+      // Inserting the new data into the database
+      const updateResult = await collection.updateOne(
+        { name: 'Guy Fieri' }, // Filter to find the document to update
         {
-            $set: {
-              name: data.name,
-              email: data.email,
-              address1: data.address1,
-              address2: data.address2,
-              city: data.city,
-              state: data.state,
-              zipcode: data.zipcode,
-              password: data.password
-            },
-          } // The new data you want to set for the matching documents
-        );
+          $set: {
+            name: clientData.name,
+            email: clientData.email,
+            address1: clientData.address1,
+            address2: clientData.address2,
+            city: clientData.city,
+            state: clientData.state,
+            zipcode: clientData.zipcode,
+            password: clientData.password,
+          },
+        } // The new data you want to set for the matching document
+      );
 
-      // Return a success message after successful submission
-      return res.status(200).json({ message: 'Profile updated successfully (testing from api src\pages\api\editProf.js)', quoteId: result.insertedId });
+      // Check if the document was found and updated
+      if (updateResult.modifiedCount === 1) {
+        // Return a success message after successful update
+        return res.status(200).json({ message: 'Profile updated successfully (testing from api src\pages\api\editProf.js)' });
+      } else {
+        // Return an error if the document was not found
+        return res.status(404).json({ error: 'Client not found' });
+      }
     } else {
       return res.status(405).json({ error: 'Method not allowed' });
     }
