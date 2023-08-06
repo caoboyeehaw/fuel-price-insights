@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { useForm } from 'react-hook-form';
 import Navbar from '../components/Navbar';
 
 const RegistrationPage = () => {
-  const { register, handleSubmit, formState: { errors, isValid }, reset } = useForm(); 
+  const { register, handleSubmit, formState: { errors, isValid, isSubmitting }, reset } = useForm();
   const [isFormFilled, setIsFormFilled] = useState(false);
 
   const [form, setForm] = useState({
@@ -15,8 +15,6 @@ const RegistrationPage = () => {
     state: '',
     zip: '', 
   });
-
-  const formRef = useRef<HTMLFormElement | null>(null); // Specify the type as HTMLFormElement | null
 
   useEffect(() => {
     const isAllFieldsFilled = (
@@ -233,12 +231,12 @@ const RegistrationPage = () => {
           {errors.zip && <p>This field is required</p>}
         </div>
         <button
-                className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
-                type="submit"
-                disabled={!isValid} // Use isValid from useForm
-              >
-                Save Changes
-              </button>
+          className="text-md flex items-center rounded-md px-4 py-1 bg-gray-900 hover:bg-gray-800 text-white"
+          type="submit"
+          disabled={!isValid || isSubmitting} // Use isSubmitting from useForm
+        >
+          {isSubmitting ? 'Saving...' : 'Save Changes'}
+        </button>
             </form>
             <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
     </form>
