@@ -4,8 +4,6 @@ import { getDatabase } from '../db';
 import bcrypt from 'bcrypt';
 import { ObjectId } from 'mongodb'
 
-
-
 export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -13,8 +11,8 @@ export default NextAuth({
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-          email: { label: "Email", type: "email" },
-          password: { label: "Password", type: "password" }
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" }
       },
 
 
@@ -30,48 +28,48 @@ export default NextAuth({
 
         const user = await clientProfile.findOne({ email });
         if(!user){
-            throw new Error('Invalid email or password');
+          throw new Error('Invalid email or password');
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if(!isPasswordMatch){
-            throw new Error('Invalid email or password!');
+          throw new Error('Invalid email or password!');
         }
 
-        return {id: user._id.toString()}; //user's _id will be saved into JWT cahnges to comment right here for later
+        // return user's email instead of id
+        
+        console.log('In authorize callback, user is', user);
+        return {id: user._id.toString(), email: user.email};
       },
     }),
   ],
 
   database: process.env.DATABASE_URL,
   session: {
-      jwt: true,
+    jwt: true,
   },
 
-  callbacks: {
+  //callbacks: {
     callbacks: {
       jwt: async function (token, user) {
-        console.log('jwt callback', token, user);
+        console.log('In jwt callback, token and user are', token, user);
         if (user) {
-          console.log('User is defined', user);
-          token.id = user.id;
-        } else if (token.token && token.token.sub) {
-          console.log('token.token.sub is defined', token.token.sub);
-          token.id = token.token.sub;
-        } else {
-          console.log('User and token.token.sub are undefined');
+          token.email = user.email;
+          console.log('In jwt callback, after adding email to token, token is', token);
         }
         return token;
       },
+
       session: async function (session, token) {
-        console.log('session callback', session, token);
+        console.log('In session callback, session and token are', session, token);
         if (session) {
-          session.userId = token.id;
+          session.user.email = token.email;
+          console.log('In session callback, after adding email to session, session is', session);
         }
         return session;
       }
     }
-  }
+//}
 
 });
 

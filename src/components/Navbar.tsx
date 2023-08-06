@@ -125,13 +125,18 @@ const Navbar = () => {
 
           </nav>
           
+          
         </div>
       </div>
-      <div className="flex justify-end px-10">
-            {loading && <p>Loading...</p>}
-            {!loading && !session && <p>User is not logged in</p>}
-            {!loading && session && <p>User is logged in</p>}
-          </div>
+            {/*
+              <div className="flex justify-end px-10">
+                {loading && <p>Loading...</p>}
+                {!loading && !session && <p>User is not logged in</p>}
+                {!loading && session && <p>User is logged in</p>} 
+              </div>
+
+            */}
+
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-80 bg-black z-20 bg-[rgba(20,20,20,0.5)] backdrop-filter backdrop-blur">
           <div className=" inset-0 flex items-center justify-center">

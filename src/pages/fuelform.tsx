@@ -5,6 +5,8 @@ import { useSession } from 'next-auth/react';
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
 import { getSession } from 'next-auth/react';
+import { NextRouter } from 'next/router';
+
 
 interface CustomSession extends Session {
   userId: string;
@@ -72,23 +74,23 @@ const Fuel_quote = () => {
       const completeData = { ...data, ...form, deliveryDate };  // Include the formatted deliveryDate
     
     try {
-        const response = await fetch('/api/submitFuelQuote', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(completeData),
-        });
-  
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const responseJson = await response.json();
-  
-        // handle success
-        console.log("Success:", responseJson);
-        alert("Form submitted successfully!");
+      const response = await fetch('/api/submitFuelQuote', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(completeData),
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseJson = await response.json();
+
+      // handle success
+      console.log("Success:", responseJson);
+      alert("Form submitted successfully!");
     } catch (error) {
         // handle error
         console.error("Error:", error);
@@ -96,7 +98,6 @@ const Fuel_quote = () => {
     }
     
   };
-  
     
   const handleInputChange = (event) => {
     const { name, value } = event.target;
