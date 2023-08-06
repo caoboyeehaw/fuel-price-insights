@@ -74,14 +74,16 @@ const Fuel_quote = () => {
       const deliveryDate = new Date(data.deliveryDate).toISOString();
 
       const completeData = { ...data, ...form, deliveryDate };  // Include the formatted deliveryDate
-    
+      
+      const session = await getSession();
+      console.log('Session before fetch:', session);
+
     try {
       const response = await fetch('/api/submitFuelQuote', {
           method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(completeData),
+          credentials: 'include',
       });
 
       if (!response.ok) {
@@ -90,15 +92,12 @@ const Fuel_quote = () => {
 
       const responseJson = await response.json();
 
-      // handle success
-      console.log("Success:", responseJson);
-      alert("Form submitted successfully!");
-
-    } catch (error) {
-      // handle error
-      console.error("Error:", error);
-      alert("An error occurred while submitting the form.");
-    }
+        // handle success
+        console.log("Success:", responseJson);
+      } catch (error) {
+        // handle error
+        console.error("Error:", error);
+      }
     
   };
     

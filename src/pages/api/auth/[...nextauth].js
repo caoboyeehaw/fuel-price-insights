@@ -15,7 +15,6 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
 
-
       authorize: async (credentials) => {
         const { email, password } = credentials;
 
@@ -36,10 +35,9 @@ export default NextAuth({
           throw new Error('Invalid email or password!');
         }
 
-        // return user's email instead of id
-        
         console.log('In authorize callback, user is', user);
-        return {id: user._id.toString(), email: user.email};
+        // Return email as id
+        return { email: user.email };
       },
     }),
   ],
@@ -47,34 +45,25 @@ export default NextAuth({
   database: process.env.DATABASE_URL,
   session: {
     jwt: true,
+    secureCookie: process.env.NODE_ENV === 'production' ? true : false,
   },
 
-    callbacks: {
-      jwt: async function (token, user) {
-        console.log('In jwt callback, token and user are', token, user);
-        if (user) {
-          token.email = user.email;
-          console.log('In jwt callback, after adding email to token, token is', token);
-        }
-        return token;
-      },
+  callbacks: {
+    jwt: async function (token, user) {
+      console.log('In jwt callback, token and user are', token, user);
+      if (user) {
+        token.email = user.email;
+      }
+      return token;
+    },
 
-      session: async function (session, token) {
-        console.log('In session callback, session and token are', session, token);
-        if (session) {
-          if (token) {
-            session.user.email = token.email;
-            console.log('In session callback, after adding email to session, session is', session);
-          } else {
-            console.error('Token is undefined in session callback');
-          }
-        }
-        return session;
+    session: async function (session, token) {
+      console.log('In session callback, session and token are', session, token);
+      if (token && token.email) {
+        session.user.email = token.email;
+      }
+      return session;
     }
-    }
-
-
+  }
 });
-
-
 
