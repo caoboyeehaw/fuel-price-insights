@@ -38,7 +38,7 @@ export default NextAuth({
             throw new Error('Invalid email or password!');
         }
 
-        return {id: user._id.toString()}; //user's _id will be saved into JWT
+        return {id: user._id.toString()}; //user's _id will be saved into JWT cahnges to comment right here for later
       },
     }),
   ],
