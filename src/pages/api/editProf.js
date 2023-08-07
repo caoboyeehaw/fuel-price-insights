@@ -9,7 +9,7 @@ export default async function editProfHandler(req, res) {
       const clientData = req.body;
 
       // Check if clientData contains all required properties
-      const requiredFields = ['name', 'email', 'address1', 'address2', 'city', 'state', 'zipcode'];
+      const requiredFields = ['name', 'email', 'address1', 'address2', 'city', 'state', 'zipcode', 'password'];
 
       for (const field of requiredFields) {
         if (!clientData[field]) {
@@ -19,7 +19,7 @@ export default async function editProfHandler(req, res) {
 
       // Inserting the new data into the database
       const updateResult = await collection.updateOne(
-        { name: 'Guy Fieri' }, // Filter to find the document to update
+        {  name: 'Guy Fieri'  }, // Filter to find the document to update using the email
         {
           $set: {
             name: clientData.name,
@@ -50,3 +50,33 @@ export default async function editProfHandler(req, res) {
     res.status(500).json({ error: 'An unexpected error occurred.' });
   }
 }
+
+export async function getProf(email) {
+  try {
+    const db = await getDatabase();
+    const Fuel = db.collection('ClientInfo'); // FUEL is collection name
+
+    // Query the database to find the document with the given email
+    const clientInfo = await Fuel.findOne({ email });
+
+    if (clientInfo) {
+      // Destructure the clientInfo object to get the desired fields
+      const { name, address1, address3, city, state, zipcode } = clientInfo;
+
+      // Now you can use the variables as needed
+      console.log(name);
+      console.log(email);
+      console.log(address1);
+      console.log(address3);
+      console.log(city);
+      console.log(state);
+      console.log(zipcode);
+    } else {
+      console.log('No client found with the provided email.');
+    }
+  } catch (error) {
+    console.error('Error retrieving data from MongoDB:', error);
+  }
+}
+
+
