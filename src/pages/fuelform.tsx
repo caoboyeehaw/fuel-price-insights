@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Session } from 'next-auth';
+import { NextRouter } from 'next/router';
+
+import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
+import { Session } from 'next-auth';
+
 import Navbar from '../components/Navbar';
 import NavbarAuth from '../components/NavbarAuth';
-import { getSession } from 'next-auth/react';
+
 
 interface CustomSession extends Session {
-  userId: string;
+  email: string;
 }
 
 const Fuel_quote = () => {
@@ -22,7 +26,7 @@ const Fuel_quote = () => {
     if (session) {
       setForm(prevForm => ({
         ...prevForm,
-        userid: (session as CustomSession)?.userId,
+        userid: (session as CustomSession)?.email,
       }));
     }
   }, [session]);
@@ -70,33 +74,32 @@ const Fuel_quote = () => {
       const deliveryDate = new Date(data.deliveryDate).toISOString();
 
       const completeData = { ...data, ...form, deliveryDate };  // Include the formatted deliveryDate
-    
+      
+      const session = await getSession();
+      console.log('Session before fetch:', session);
+
     try {
-        const response = await fetch('/api/submitFuelQuote', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(completeData),
-        });
-  
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
-        const responseJson = await response.json();
-  
+      const response = await fetch('/api/submitFuelQuote', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(completeData),
+          credentials: 'include',
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseJson = await response.json();
+
         // handle success
         console.log("Success:", responseJson);
-        alert("Form submitted successfully!");
-    } catch (error) {
+      } catch (error) {
         // handle error
         console.error("Error:", error);
-        alert("An error occurred while submitting the form.");
-    }
+      }
     
   };
-  
     
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -165,8 +168,8 @@ const Fuel_quote = () => {
               {...register('gallonsRequested', { required: true })}
               onChange={handleInputChange}                
             />
-        </div>
 
+          </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">
                 Delivery Address:
@@ -196,7 +199,6 @@ const Fuel_quote = () => {
                 <p className="text-red-500 text-sm">This field is required</p>
               )}
             </div>
-
             <div>
 
             <button
