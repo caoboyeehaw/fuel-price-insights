@@ -9,7 +9,7 @@ export default async function editProfHandler(req, res) {
       const clientData = req.body;
 
       // Check if clientData contains all required properties
-      const requiredFields = ['name', 'email', 'address1', 'address2', 'city', 'state', 'zipcode', 'password'];
+      const requiredFields = ['name', 'email', 'address1', 'address2', 'city', 'state', 'zipcode'];
 
       for (const field of requiredFields) {
         if (!clientData[field]) {

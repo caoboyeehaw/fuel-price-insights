@@ -19,7 +19,7 @@ export default async function editProfHandler(req, res) {
 
       // Inserting the new data into the database
       const updateResult = await collection.updateOne(
-        { email: clientData.email }, // Filter to find the document to update using the email
+        {  name: 'Guy Fieri'  }, // Filter to find the document to update using the email
         {
           $set: {
             name: clientData.name,
