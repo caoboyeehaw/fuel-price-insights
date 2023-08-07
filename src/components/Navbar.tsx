@@ -106,6 +106,7 @@ const Navbar = () => {
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/homepage" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/">Homepage</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/fuelform" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/fuelform">Fuel Form</Link>
               <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/quotehistory" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/quotehistory">Quote History</Link>
+              <Link className={`text-md rounded-lg px-4 py-2 ${router.pathname === "/edit" ? "text-black" : "text-slate-500 hover:text-black"}`} href="/edit">Edit Profile</Link>
             </div>
               <div className="flex space-x-4 items-center">
               

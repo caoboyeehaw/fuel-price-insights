@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { useForm } from 'react-hook-form';
 import { Session } from 'next-auth';
 import { useSession } from 'next-auth/react';
@@ -12,7 +12,6 @@ interface CustomSession extends Session {
 }
 
 const RegistrationPage = () => {
-
   const [isFormFilled, setIsFormFilled] = useState(false);
   
   const { register, handleSubmit, setValue, formState: { errors, isValid }, reset } = useForm();
@@ -47,7 +46,6 @@ const RegistrationPage = () => {
     zip: '', 
   });
 
-  const formRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     const isAllFieldsFilled = (
